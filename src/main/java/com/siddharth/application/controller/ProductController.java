@@ -43,8 +43,15 @@ public class ProductController {
     }
 
     //search product by category
-    @PostMapping(value = "/searchProductByCategory")
-    private ResponseEntity<List<ProductDto>> searchProductByCategory(@RequestParam String category) {
+    @PostMapping(value = "/searchProductsByCategory")
+    private ResponseEntity<List<ProductDto>> getProductByCategory(@RequestParam String category) {
         return new ResponseEntity<>(productServiceImpl.searchProductByCategory(category), HttpStatus.OK);
     }
+
+    //search product by title
+    @PostMapping(value = "/searchProductsByTitle")
+    private ResponseEntity<List<ProductDto>> getProductByTitle(@RequestParam String title) {
+        return new ResponseEntity<>(productServiceImpl.searchProductByTitle(title), HttpStatus.OK);
+    }
+
 }

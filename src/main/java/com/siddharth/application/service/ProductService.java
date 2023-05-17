@@ -17,4 +17,6 @@ public interface ProductService {
     ProductDto editDetailsById(Long productId, ProductDto productDto);
 
     List<ProductDto> searchProductByCategory(String category);
+
+    List<ProductDto> searchProductByTitle(String title);
 }

@@ -97,7 +97,27 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> searchProductByCategory(String category) {
-        ProductEntity productEntity = productRepository.findByCategory(category);
+        List<ProductEntity> productEntityList = productRepository.findByCategory(category);
+        if(!productEntityList.isEmpty()) {
+            List<ProductDto> productDtoList = new ArrayList<>();
+            for(ProductEntity productEntity : productEntityList) {
+                productDtoList.add(productEntity.toProductDto());
+            }
+            return productDtoList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<ProductDto> searchProductByTitle(String title) {
+        List<ProductEntity> productEntityList = productRepository.findByTitle(title);
+        if(!productEntityList.isEmpty()) {
+            List<ProductDto> productDtoList = new ArrayList<>();
+            for(ProductEntity productEntity : productEntityList) {
+                productDtoList.add(productEntity.toProductDto());
+            }
+            return productDtoList;
+        }
         return null;
     }
 }
