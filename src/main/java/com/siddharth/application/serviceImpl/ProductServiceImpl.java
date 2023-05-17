@@ -96,11 +96,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto searchProductByCategory(String category) {
+    public List<ProductDto> searchProductByCategory(String category) {
         ProductEntity productEntity = productRepository.findByCategory(category);
-        if(productEntity != null) {
-            return productEntity.toProductDto();
-        }
         return null;
     }
 }
