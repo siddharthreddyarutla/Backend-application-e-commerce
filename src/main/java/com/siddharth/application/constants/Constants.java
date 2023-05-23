@@ -8,4 +8,7 @@ public class Constants {
     public static final String USER_DELETED = "USER DELETED SUCCESSFULLY";
     public static final String PRODUCT_DELETED = "PRODUCT DELETED SUCCESSFULLY";
     public static final String PRODUCT_NOT_FOUND = "PRODUCT NOT FOUND TO DELETE";
+    public static final String OUT_OF_STOCK = "OUT OF STOCK";
+    public static final String IN_STOCK = "IN STOCK";
+    public static final String NOT_AVAILABLE = "NO LONGER AVAILABLE";
 }

@@ -13,7 +13,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "product")
+@Table(name = "PRODUCT_DESCRIPTION")
 public class ProductEntity {
     @Id
     @Column(name="PRODUCT_ID")
@@ -30,16 +30,16 @@ public class ProductEntity {
     @Column(name="STOCK")
     private Long stock;
     @Column(name="DISCOUNT")
-    private String discountPercentage;
+    private Double discountPercentage;
     @Column(name="RATING")
-    private String rating;
+    private Double rating;
     @Column(name="DESCRIPTION")
     private String description;
     @Column(name="IMAGE")
     private String image;
 
     public ProductDto toProductDto() {
-        return ProductDto.builder().productId(productId).title(title).brand(brand).category(category).price(price).stock(stock)
-                .discountPercentage(discountPercentage).rating(rating).description(description).image(image).build();
+        return ProductDto.builder().productId(productId).title(title).brand(brand).category(category).price(price)
+                .stock(stock).discountPercentage(discountPercentage).rating(rating).description(description).image(image).build();
     }
 }

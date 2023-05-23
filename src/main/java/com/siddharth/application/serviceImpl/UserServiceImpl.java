@@ -75,22 +75,22 @@ public class UserServiceImpl implements UserService {
     public UserDto editUserById(Long id, UserDto userDto) {
         Optional<UserEntity> userEntity = userRepository.findByUserId(id);
         if(userEntity.isPresent()) {
-            if(userDto.getName() != null) {
+            if(!userDto.getName().isEmpty()) {
                 userEntity.get().setName(userDto.getName());
             }
-            if (userDto.getMobileNo() != null) {
+            if (!userDto.getMobileNo().isEmpty()) {
                 userEntity.get().setMobileNo(userDto.getMobileNo());
             }
-            if(userDto.getLocation() != null) {
+            if(!userDto.getLocation().isEmpty()) {
                 userEntity.get().setLocation(userDto.getLocation());
             }
-            if(userDto.getEmail() != null) {
+            if(!userDto.getEmail().isEmpty()) {
                 userEntity.get().setEmail(userDto.getEmail());
             }
-            if(userDto.getPassword() != null) {
+            if(!userDto.getPassword().isEmpty()) {
                 userEntity.get().setPassword(userDto.getPassword());
             }
-            if(userDto.getRole() != null) {
+            if(!userDto.getRole().isEmpty()) {
                 userEntity.get().setRole(userDto.getRole());
             }
             userRepository.save(userEntity.get());

@@ -17,13 +17,14 @@ public class ProductDto {
     private String category;
     private Long price;
     private Long stock;
-    private String discountPercentage;
-    private String rating;
+    private Double discountPercentage;
+    private Double rating;
     private String description;
     private String image;
 
     public ProductEntity toProductEntity() {
-        return ProductEntity.builder().productId(productId).title(title).brand(brand).category(category).price(price).stock(stock)
-                .discountPercentage(discountPercentage).rating(rating).description(description).image(image).build();
+        return ProductEntity.builder().productId(productId).title(title).brand(brand).category(category).price(price)
+                .stock(stock).discountPercentage(discountPercentage).rating(rating).description(description).
+                image(image).build();
     }
 }
