@@ -111,12 +111,25 @@ public class UserServiceImpl implements UserService {
     public UserAddressDto createAddressForUser(Long userId, UserAddressDto userAddressDto) {
         Optional<UserEntity> userEntity = userRepository.findByUserId(userId);
         if (userEntity != null) {
+            if (userAddressDto.getDefaultAddress() == true) {
+                makeDefaultAddressFalse(userId);
+            }
             UserAddressEntity userAddressEntity = userAddressDto.toUserAddressEntity();
             userAddressEntity.setUserId(userId);
             userAddressRepository.save(userAddressEntity);
             return userAddressDto;
         }
         return null;
+    }
+
+    public void makeDefaultAddressFalse(Long userId) {
+        List<UserAddressEntity> userAddressEntityList = userAddressRepository.findByUserId(userId);
+        if (!userAddressEntityList.isEmpty()) {
+            for (UserAddressEntity userAddressEntity : userAddressEntityList) {
+                userAddressEntity.setDefaultAddress(false);
+                userAddressRepository.save(userAddressEntity);
+            }
+        }
     }
 
     @Override
@@ -132,6 +145,59 @@ public class UserServiceImpl implements UserService {
                 }
             }
             return userAddressDtoList;
+        }
+        return null;
+    }
+
+    @Override
+    public String deleteAddressById(Long addressId) {
+        UserAddressEntity userAddressEntity = userAddressRepository.findByAddressId(addressId);
+        if (userAddressEntity != null) {
+            userAddressRepository.delete(userAddressEntity);
+            return ADDRESS_DELETE;
+        }
+        return ADDRESS_NOT_FOUND;
+    }
+
+    @Override
+    public UserAddressDto editAddressById(Long addressId, UserAddressDto userAddressDto) {
+        UserAddressEntity userAddressEntity = userAddressRepository.findByAddressId(addressId);
+        if (userAddressEntity != null) {
+            if (userAddressDto.getFullName() != null) {
+                userAddressEntity.setFullName(userAddressDto.getFullName());
+            }
+            if (userAddressDto.getMobileNumber() != null) {
+                userAddressEntity.setMobileNumber(userAddressDto.getMobileNumber());
+            }
+            if (userAddressDto.getPinCode() != null) {
+                userAddressEntity.setPinCode(userAddressDto.getPinCode());
+            }
+            if (userAddressDto.getHouseNo() != null) {
+                userAddressEntity.setHouseNo(userAddressDto.getHouseNo());
+            }
+            if (userAddressDto.getVillageOrStreet() != null) {
+                userAddressEntity.setVillageOrStreet(userAddressDto.getVillageOrStreet());
+            }
+            if (userAddressDto.getCityOrTown() != null) {
+                userAddressEntity.setCityOrTown(userAddressDto.getCityOrTown());
+            }
+            if (userAddressDto.getState() != null) {
+                userAddressEntity.setState(userAddressDto.getState());
+            }
+            if (userAddressDto.getCountry() != null) {
+                userAddressEntity.setCountry(userAddressDto.getCountry());
+            }
+            if (userAddressDto.getAddressType() != null) {
+                userAddressEntity.setAddressType(userAddressDto.getAddressType());
+            }
+            if (userAddressDto.getDefaultAddress() != null) {
+                if (userAddressDto.getDefaultAddress() == true) {
+                    makeDefaultAddressFalse(userAddressEntity.getUserId());
+                }
+                userAddressEntity.setDefaultAddress(userAddressDto.getDefaultAddress());
+            }
+            userAddressRepository.save(userAddressEntity);
+            return userAddressEntity.toUserAddressDto();
         }
         return null;
     }

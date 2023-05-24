@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS ADDRESS(
+ID bigint PRIMARY KEY NOT NULL AUTO_INCREMENT COMMENT "user address id",
 USER_ID bigint NOT NULL COMMENT "user id to as foreign key",
 FULL_NAME VARCHAR(255) NOT NULL COMMENT "full name of the delivery address",
 MOBILE_NUMBER VARCHAR(255) NOT NULL COMMENT "mobile number of the delivery address",

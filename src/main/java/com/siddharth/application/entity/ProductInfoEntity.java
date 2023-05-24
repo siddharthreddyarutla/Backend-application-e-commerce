@@ -24,7 +24,7 @@ public class ProductInfoEntity {
     private String productState;
 
     public ProductInfoDto toProductInfoDto() {
-        return ProductInfoDto.builder().productId(productId).productQuantity(productQuantity)
+        return ProductInfoDto.builder().productQuantity(productQuantity)
                 .productState(productState).build();
     }
 }

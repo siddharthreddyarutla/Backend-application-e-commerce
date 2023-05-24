@@ -22,4 +22,8 @@ public interface UserService {
     UserAddressDto createAddressForUser(Long userId, UserAddressDto userAddressDto);
 
     List<UserAddressDto> getAllUserAddressesByUserId(Long userId);
+
+    String deleteAddressById(Long addressId);
+
+    UserAddressDto editAddressById(Long addressId, UserAddressDto userAddressDto);
 }

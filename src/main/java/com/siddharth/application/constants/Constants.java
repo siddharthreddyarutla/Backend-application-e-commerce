@@ -13,4 +13,6 @@ public class Constants {
     public static final String NOT_AVAILABLE = "NO LONGER AVAILABLE";
     public static final String COMPLETE_PRODUCT_DELETE = "COMPLETE PRODUCT DETAILS DELETED SUCCESSFULLY";
     public static final String COMPLETE_PRODUCT_NOT_FOUND = "COMPLETE PRODUCT DETAILS NOT FOUND TO DELETE";
+    public static final String ADDRESS_DELETE = "USER ADDRESS DELETED SUCCESSFULLY";
+    public static final String ADDRESS_NOT_FOUND = "USER ADDRESS NOT FOUND";
 }

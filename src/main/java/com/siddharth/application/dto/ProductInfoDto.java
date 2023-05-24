@@ -11,12 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductInfoDto {
-    private Long productId;
     private Long productQuantity;
     private String productState;
 
     public ProductInfoEntity toProductInfoEntity() {
-        return ProductInfoEntity.builder().productId(productId).productQuantity(productQuantity)
+        return ProductInfoEntity.builder().productQuantity(productQuantity)
                 .productState(productState).build();
     }
 }

@@ -16,6 +16,9 @@ import javax.persistence.*;
 @Table(name = "ADDRESS")
 public class UserAddressEntity {
     @Id
+    @Column(name = "ADDRESS_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long addressId;
     @Column(name = "USER_ID")
     private Long userId;
     @Column(name = "FULL_NAME")
@@ -40,7 +43,7 @@ public class UserAddressEntity {
     private Boolean defaultAddress;
 
     public UserAddressDto toUserAddressDto() {
-        return UserAddressDto.builder().fullName(fullName).mobileNumber(mobileNumber).pinCode(pinCode)
+        return UserAddressDto.builder().addressId(addressId).fullName(fullName).mobileNumber(mobileNumber).pinCode(pinCode)
                 .houseNo(houseNo).villageOrStreet(villageOrStreet).cityOrTown(cityOrTown).state(state)
                 .country(country).addressType(addressType).defaultAddress(defaultAddress).build();
     }

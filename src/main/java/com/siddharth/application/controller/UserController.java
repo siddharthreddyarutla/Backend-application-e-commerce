@@ -74,4 +74,16 @@ public class UserController {
         return new ResponseEntity<>(userServiceImpl.getAllUserAddressesByUserId(userId), HttpStatus.OK);
     }
 
+    // delete address by address id
+    @DeleteMapping(value = "/deleteAddressByAddressId")
+    private ResponseEntity<String> deleteAddressByAddressId(@RequestParam Long addressId) {
+        return new ResponseEntity<>(userServiceImpl.deleteAddressById(addressId), HttpStatus.OK);
+    }
+
+    // edit address by address id
+    @PutMapping(value = "/editAddressByAddressId")
+    private ResponseEntity<UserAddressDto> editAddressByAddressId(@RequestParam Long addressId, @RequestBody
+                                                                  UserAddressDto userAddressDto) {
+        return new ResponseEntity<>(userServiceImpl.editAddressById(addressId, userAddressDto), HttpStatus.OK);
+    }
 }
