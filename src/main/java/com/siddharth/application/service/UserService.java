@@ -1,7 +1,10 @@
 package com.siddharth.application.service;
 
+import com.siddharth.application.dto.UserAddressDto;
 import com.siddharth.application.dto.UserDto;
 import com.siddharth.application.dto.UserLoginDto;
+
+import java.util.List;
 
 public interface UserService {
     UserDto createUser(UserDto userDto);
@@ -15,4 +18,8 @@ public interface UserService {
     String deleteUserById(Long userId);
 
     UserDto editUserById(Long userId, UserDto userDto);
+
+    UserAddressDto createAddressForUser(Long userId, UserAddressDto userAddressDto);
+
+    List<UserAddressDto> getAllUserAddressesByUserId(Long userId);
 }

@@ -110,7 +110,7 @@ public class ProductController {
     // post all complete product details
     @PostMapping(value = "/postCompleteProductDetails")
     private ResponseEntity<ProductCompleteDetailsDto> postProductCompleteDetails(@RequestBody ProductCompleteDetailsDto
-                                                                                    productCompleteDetails) {
+                                                                                             productCompleteDetails) {
         return new ResponseEntity<>(productServiceImpl.postCompleteDetailsOfProduct(productCompleteDetails), HttpStatus.OK);
     }
 
@@ -151,6 +151,7 @@ public class ProductController {
     }
 
     // Delete the complete product details by productId
+
     /**
      * THIS API IS USED ONLY IF YOU WANT TO DELETE COMPLETE PRODUCT DETAILS PERMANENTLY
      * USE ONLY WHEN YOU DON'T WANT THE PRODUCT ANYMORE

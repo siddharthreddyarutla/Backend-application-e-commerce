@@ -16,9 +16,6 @@ import javax.persistence.*;
 @Table(name = "PRODUCT_INFO")
 public class ProductInfoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PRODUCT_INFO_ID")
-    private Long productInfoId;
     @Column(name = "PRODUCT_ID")
     private Long productId;
     @Column(name = "QUANTITY")

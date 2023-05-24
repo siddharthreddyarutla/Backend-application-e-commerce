@@ -1,19 +1,21 @@
 package com.siddharth.application.entity;
 
+import com.siddharth.application.dto.UserAddressDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+@Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "/ADDRESS")
+@Table(name = "ADDRESS")
 public class UserAddressEntity {
+    @Id
     @Column(name = "USER_ID")
     private Long userId;
     @Column(name = "FULL_NAME")
@@ -29,11 +31,17 @@ public class UserAddressEntity {
     @Column(name = "CITY_OR_TOWN")
     private String cityOrTown;
     @Column(name = "STATE")
-    private String State;
+    private String state;
     @Column(name = "COUNTRY")
     private String country;
     @Column(name = "ADDRESS_TYPE")
     private String addressType;
     @Column(name = "DEFAULT_ADDRESS")
-    private  Boolean defaultAddress;
+    private Boolean defaultAddress;
+
+    public UserAddressDto toUserAddressDto() {
+        return UserAddressDto.builder().fullName(fullName).mobileNumber(mobileNumber).pinCode(pinCode)
+                .houseNo(houseNo).villageOrStreet(villageOrStreet).cityOrTown(cityOrTown).state(state)
+                .country(country).addressType(addressType).defaultAddress(defaultAddress).build();
+    }
 }
