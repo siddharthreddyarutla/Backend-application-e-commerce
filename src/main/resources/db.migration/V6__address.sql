@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS ADDRESS(
+USER_ID bigint NOT NULL COMMENT "user id to as foreign key",
+FULL_NAME VARCHAR(255) NOT NULL COMMENT "full name of the delivery address",
+MOBILE_NUMBER VARCHAR(255) NOT NULL COMMENT "mobile number of the delivery address",
+PIN_CODE VARCHAR(255) NOT NULL COMMENT "pincode of the address",
+HOUSE_NO VARCHAR(255) COMMENT "house number of the address",
+VILLAGE_OR_STREET VARCHAR(255) COMMENT "village or street of the address",
+CITY_OR_TOWN VARCHAR(255) NOT NULL COMMENT "city or town of the address",
+STATE VARCHAR(255) NOT NULL COMMENT "address state",
+COUNTRY VARCHAR(255) NOT NULL COMMENT "address country",
+ADDRESS_TYPE VARCHAR(255) NOT NULL COMMENT "address type - HOME/OFFICE/BUSINESS/OTHER",
+DEFAULT_ADDRESS BOOLEAN NOT NULL COMMENT "if default address - 1 or else 0 ",
+FOREIGN KEY (USER_ID) REFERENCES USER(USER_ID) ON DELETE CASCADE
+);

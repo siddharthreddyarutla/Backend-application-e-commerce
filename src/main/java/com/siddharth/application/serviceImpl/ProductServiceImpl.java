@@ -3,6 +3,7 @@ package com.siddharth.application.serviceImpl;
 import com.siddharth.application.dto.ProductCompleteDetailsDto;
 import com.siddharth.application.dto.ProductDto;
 import com.siddharth.application.dto.ProductInfoDto;
+import com.siddharth.application.dto.ProductPrimaryDto;
 import com.siddharth.application.entity.ProductEntity;
 import com.siddharth.application.entity.ProductInfoEntity;
 import com.siddharth.application.repository.ProductInfoRepository;
@@ -377,5 +378,43 @@ public class ProductServiceImpl implements ProductService {
             return productInfoEntity.toProductInfoDto();
         }
         return null;
+    }
+
+    @Override
+    public String deleteCompleteProductDetailsByProductId(Long productId) {
+        ProductEntity productEntity = productRepository.findByProductId(productId);
+        ProductInfoEntity productInfoEntity = productInfoRepository.findByProductId(productId);
+
+        if (productEntity != null && productInfoEntity != null) {
+            productRepository.delete(productEntity);
+            productInfoRepository.delete(productInfoEntity);
+            return COMPLETE_PRODUCT_DELETE;
+        }
+        return COMPLETE_PRODUCT_NOT_FOUND;
+    }
+
+    @Override
+    public List<ProductPrimaryDto> getAllPrimaryProductDetails() {
+        try {
+            List<ProductPrimaryDto> productPrimaryDtoList = new ArrayList<>();
+
+            List<ProductEntity> productEntityList = productRepository.findAll();
+            if (!productEntityList.isEmpty()) {
+                for (ProductEntity productEntity : productEntityList) {
+                    ProductInfoEntity productInfoEntity = productInfoRepository.findByProductId(productEntity.getProductId());
+
+                    ProductDto productDto = productEntity.toProductDto();
+                    ProductInfoDto productInfoDto = productInfoEntity.toProductInfoDto();
+
+                    ProductPrimaryDto productPrimaryDto = new ProductPrimaryDto(productDto, productInfoDto);
+                    productPrimaryDtoList.add(productPrimaryDto);
+
+                }
+            }
+            return productPrimaryDtoList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

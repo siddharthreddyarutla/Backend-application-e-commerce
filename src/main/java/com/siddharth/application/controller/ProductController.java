@@ -3,6 +3,7 @@ package com.siddharth.application.controller;
 import com.siddharth.application.dto.ProductCompleteDetailsDto;
 import com.siddharth.application.dto.ProductDto;
 import com.siddharth.application.dto.ProductInfoDto;
+import com.siddharth.application.dto.ProductPrimaryDto;
 import com.siddharth.application.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -147,5 +148,21 @@ public class ProductController {
                                                                           @RequestParam Long productQuantity) {
         return new ResponseEntity<>(productServiceImpl.putProductQuantityByProductId(productId, productQuantity),
                 HttpStatus.OK);
+    }
+
+    // Delete the complete product details by productId
+    /**
+     * THIS API IS USED ONLY IF YOU WANT TO DELETE COMPLETE PRODUCT DETAILS PERMANENTLY
+     * USE ONLY WHEN YOU DON'T WANT THE PRODUCT ANYMORE
+     */
+    @DeleteMapping(value = "/deleteCompleteProductDetailsByProductId")
+    private ResponseEntity<String> deleteCompleteProductDetailsByProductId(@RequestParam Long productId) {
+        return new ResponseEntity<>(productServiceImpl.deleteCompleteProductDetailsByProductId(productId), HttpStatus.OK);
+    }
+
+    // get all primary details of product
+    @GetMapping(value = "/getAllPrimaryDetailsOfProduct")
+    private ResponseEntity<List<ProductPrimaryDto>> getAllPrimaryDetails() {
+        return new ResponseEntity<>(productServiceImpl.getAllPrimaryProductDetails(), HttpStatus.OK);
     }
 }

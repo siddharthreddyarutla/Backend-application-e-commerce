@@ -3,6 +3,7 @@ package com.siddharth.application.service;
 import com.siddharth.application.dto.ProductCompleteDetailsDto;
 import com.siddharth.application.dto.ProductDto;
 import com.siddharth.application.dto.ProductInfoDto;
+import com.siddharth.application.dto.ProductPrimaryDto;
 
 import java.util.List;
 
@@ -50,4 +51,7 @@ public interface ProductService {
     ProductInfoDto setStateOfProduct(Long productId, String productState);
 
     ProductInfoDto putProductQuantityByProductId(Long productId, Long productQuantity);
+    String deleteCompleteProductDetailsByProductId(Long productId);
+
+    List<ProductPrimaryDto> getAllPrimaryProductDetails();
 }
