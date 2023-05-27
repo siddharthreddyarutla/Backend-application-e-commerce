@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
             log.info("Cannot validate because " + USER_NOT_FOUND);
             return null;
         } else {
+            userLoginDto1.setUserId(userEntity.getUserId());
             userLoginDto1.setEmail(userEntity.getEmail());
             userLoginDto1.setPassword(userEntity.getPassword());
             userLoginDto1.setRole(userEntity.getRole());

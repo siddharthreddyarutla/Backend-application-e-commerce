@@ -1,6 +1,7 @@
 package com.siddharth.application.entity;
 
 import com.siddharth.application.dto.ProductDto;
+import com.siddharth.application.dto.ProductPrimaryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
