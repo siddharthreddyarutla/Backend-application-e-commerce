@@ -26,6 +26,6 @@ public class CartOrWishlistEntity {
     private Long productId;
     @Column(name = "QUANTITY")
     private Long quantity;
-    @Column(name = "WISHLIST")
-    private Boolean wishList;
+    @Column(name = "CART_STATE")
+    private String cartState;
 }

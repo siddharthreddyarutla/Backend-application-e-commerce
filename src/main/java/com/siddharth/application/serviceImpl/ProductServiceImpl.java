@@ -270,8 +270,8 @@ public class ProductServiceImpl implements ProductService {
                 for (ProductEntity productEntity : productEntityList) {
                     ProductInfoEntity productInfoEntity = productInfoRepository.findByProductId
                             (productEntity.getProductId());
-                    if (productInfoEntity.getProductState() == NOT_AVAILABLE) {
-                       continue;
+                    if (productInfoEntity.getProductState().equals(NOT_AVAILABLE)) {
+                        continue;
                     } else {
                         ProductDto productDto = productEntity.toProductDto();
                         ProductInfoDto productInfoDto = productInfoEntity.toProductInfoDto();

@@ -14,10 +14,10 @@ public class CartOrWishlistDto {
     private Long userId;
     private Long productId;
     private Long quantity;
-    private Boolean wishList;
+    private String cartState;
 
     public CartOrWishlistEntity toCartOrWishlistEntity() {
         return CartOrWishlistEntity.builder().userId(userId).productId(productId).quantity(quantity)
-                .wishList(wishList).build();
+                .cartState(cartState).build();
     }
 }

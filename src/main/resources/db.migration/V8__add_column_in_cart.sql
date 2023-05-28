@@ -1,0 +1,2 @@
+ALTER TABLE SIDDHARTH.CART
+ADD COLUMN CART_STATE VARCHAR(255) NOT NULL COMMENT "state of the product whether in cart/wishlist";

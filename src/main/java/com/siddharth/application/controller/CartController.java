@@ -1,5 +1,6 @@
 package com.siddharth.application.controller;
 
+import com.siddharth.application.dto.CartCompleteDto;
 import com.siddharth.application.dto.CartOrWishlistDto;
 import com.siddharth.application.dto.ProductDto;
 import com.siddharth.application.dto.ProductPrimaryDto;
@@ -31,5 +32,11 @@ public class CartController {
     @GetMapping(value = "/getProductsAddedToCart/{userId}")
     private ResponseEntity<List<ProductDto>> getAllProductsInCart(@PathVariable Long userId) {
         return new ResponseEntity<>(cartServiceImpl.getAllProductsFromCart(userId), HttpStatus.OK);
+    }
+
+    // get all complete products that are added to cart
+    @GetMapping(value = "/getCompleteProductsDetailsAddedToCart")
+    private ResponseEntity<List<CartCompleteDto>> getAllCompleteProductsAddedToCart(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.getAllCompleteProductDetailsAddedToCart(userId), HttpStatus.OK);
     }
 }
