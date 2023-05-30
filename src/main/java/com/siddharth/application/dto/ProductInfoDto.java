@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -13,9 +15,9 @@ import lombok.NoArgsConstructor;
 public class ProductInfoDto {
     private Long productQuantity;
     private String productState;
-
+    private LocalDate deliveryDate;
     public ProductInfoEntity toProductInfoEntity() {
         return ProductInfoEntity.builder().productQuantity(productQuantity)
-                .productState(productState).build();
+                .productState(productState).deliveryDate(deliveryDate).build();
     }
 }

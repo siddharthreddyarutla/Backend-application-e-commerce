@@ -1,17 +1,14 @@
 package com.siddharth.application.controller;
 
-import com.siddharth.application.dto.CartCompleteDto;
-import com.siddharth.application.dto.CartOrWishlistDto;
-import com.siddharth.application.dto.ProductDto;
-import com.siddharth.application.dto.ProductPrimaryDto;
-import com.siddharth.application.service.CartService;
+import com.siddharth.application.dto.*;
+import com.siddharth.application.entity.CartOrWishlistEntity;
 import com.siddharth.application.serviceImpl.CartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.GeneratedValue;
 import java.util.List;
 
 @RestController
@@ -38,5 +35,17 @@ public class CartController {
     @GetMapping(value = "/getCompleteProductsDetailsAddedToCart")
     private ResponseEntity<List<CartCompleteDto>> getAllCompleteProductsAddedToCart(@RequestParam Long userId) {
         return new ResponseEntity<>(cartServiceImpl.getAllCompleteProductDetailsAddedToCart(userId), HttpStatus.OK);
+    }
+
+    // get the pre-order details of the products added to cart
+    @GetMapping(value = "/getPreOrderDetailsOfCart")
+    private ResponseEntity<PreOrderDetailsDto> getPreOrderDetailsOfCartByUserId(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.getPreOrderDetailsOfCartByUserId(userId), HttpStatus.OK);
+    }
+
+    // remove product from the cart
+    @DeleteMapping(value = "/removeProductFromCart")
+    private ResponseEntity<String> removeItemFromCart(@RequestParam Long userId, @RequestParam Long productId) {
+        return new ResponseEntity<>(cartServiceImpl.deleteProductFromCart(userId, productId), HttpStatus.OK);
     }
 }

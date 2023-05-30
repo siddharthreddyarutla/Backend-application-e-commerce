@@ -17,4 +17,9 @@ public class Constants {
     public static final String ADDRESS_NOT_FOUND = "USER ADDRESS NOT FOUND";
     public static final String CART = "IN CART";
     public static final String WISHLIST = "IN WISHLIST";
+    public static final Long MINIMUM_DELIVERY_AMOUNT = 449L;
+    public static final String ORDER_ELIGIBLE_FOR_FREE_DELIVERY = "Your order is eligible for FREE Delivery";
+    public static final String ITEM_REMOVED_FROM_CART = "ITEM REMOVED SUCCESSFULLY FROM THE CART";
+    public static final String ERROR_REMOVING_ITEM_FROM_CART = "ERROR WHILE REMOVING ITEM FROM THE CART";
+
 }
