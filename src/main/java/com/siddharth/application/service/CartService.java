@@ -14,4 +14,14 @@ public interface CartService {
     PreOrderDetailsDto getPreOrderDetailsOfCartByUserId(Long userId);
 
     String deleteProductFromCart(Long userId, Long productId);
+
+    OrderDetailsDto orderProductItems(OrderDetailsDto orderDetailsDto);
+
+    String updateOrderState(Long orderId, String orderState);
+
+    String deleteCart(Long userId);
+
+    List<OrderDetailsDto> getAllOrderDetails();
+
+    List<OrderDetailsDto> getMyOrders(Long userId);
 }

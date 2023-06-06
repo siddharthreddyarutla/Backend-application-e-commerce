@@ -48,4 +48,34 @@ public class CartController {
     private ResponseEntity<String> removeItemFromCart(@RequestParam Long userId, @RequestParam Long productId) {
         return new ResponseEntity<>(cartServiceImpl.deleteProductFromCart(userId, productId), HttpStatus.OK);
     }
+
+    // buy or order products from the cart
+    @PostMapping(value = "/orderProductItems")
+    private ResponseEntity<OrderDetailsDto> orderProducts(@RequestBody OrderDetailsDto orderDetailsDto) {
+        return new ResponseEntity<>(cartServiceImpl.orderProductItems(orderDetailsDto), HttpStatus.OK);
+    }
+
+    // set orderState
+    @PutMapping(value = "/updateOrderState")
+    private ResponseEntity<String> updateOrderState(@RequestParam Long orderId, @RequestParam String orderState) {
+        return new ResponseEntity<>(cartServiceImpl.updateOrderState(orderId, orderState), HttpStatus.OK);
+    }
+
+    // delete all items from the cart or empty cart
+    @DeleteMapping(value = "/emptyCart")
+    private ResponseEntity<String> deleteCart(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.deleteCart(userId), HttpStatus.OK);
+    }
+
+    // get all orders history
+    @GetMapping(value = "/getAllOrders")
+    private ResponseEntity<List<OrderDetailsDto>> getAllOrders() {
+        return new ResponseEntity<>(cartServiceImpl.getAllOrderDetails(), HttpStatus.OK);
+    }
+
+    // get all orders history by user id
+    @GetMapping(value = "/getMyOrders")
+    private ResponseEntity<List<OrderDetailsDto>> getMyOrderDetails(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.getMyOrders(userId), HttpStatus.OK);
+    }
 }
