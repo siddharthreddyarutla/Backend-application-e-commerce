@@ -40,6 +40,9 @@ public class CartServiceImpl implements CartService {
     @Autowired
     OrderDetailsRepository orderDetailsRepository;
 
+    @Autowired
+    UserAddressRepository userAddressRepository;
+
     @Override
     public CartOrWishlistDto addToCart(CartOrWishlistDto cartOrWishlistDto) {
         CartOrWishlistEntity cartOrWishlistEntity = cartRepository
@@ -270,6 +273,91 @@ public class CartServiceImpl implements CartService {
                 }
                 return orderDetailsDtoList;
             }
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<OrderDetailsCompleteDto> getMyOrdersCompleteDetails(Long userId) {
+        List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByUserId(userId);
+
+        if (!orderDetailsEntityList.isEmpty()) {
+            List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList =
+                    convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
+            return orderDetailsCompleteDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    public List<OrderDetailsCompleteDto> convertToOrderDetailsCompleteDetailsDto(List<OrderDetailsEntity>
+                                                                                         orderDetailsEntityList) {
+        List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList = new ArrayList<>();
+        if (!orderDetailsEntityList.isEmpty()) {
+            for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntityList) {
+                List<UserAddressEntity> userAddressEntityList = userAddressRepository
+                        .findByUserId(orderDetailsEntity.getUserId());
+                String[] productIds = orderDetailsEntity.getProductId().split(",");
+
+                List<ProductEntity> productEntityList = new ArrayList<>();
+                List<ProductDto> productDtoList = new ArrayList<>();
+                for (String productId : productIds) {
+                    ProductEntity productEntity = productRepository.findByProductId(Long.valueOf(productId));
+                    productEntityList.add(productEntity);
+                }
+                OrderDetailsCompleteDto orderDetailsCompleteDto =  new OrderDetailsCompleteDto();
+                for (UserAddressEntity userAddressEntity : userAddressEntityList) {
+                    orderDetailsCompleteDto.setUserAddressDto(userAddressEntity.toUserAddressDto());
+                }
+                for (ProductEntity productEntity : productEntityList) {
+                    productDtoList.add(productEntity.toProductDto());
+                }
+                orderDetailsCompleteDto.setProductDtoList(productDtoList);
+                orderDetailsCompleteDto.setOrderPlacedDate(orderDetailsEntity.getOrderPlacedDate());
+                orderDetailsCompleteDto.setDeliveryDate(orderDetailsEntity.getDeliveryDate());
+                orderDetailsCompleteDto.setPaymentMethod(orderDetailsEntity.getPaymentMethod());
+                orderDetailsCompleteDto.setTotalItems(orderDetailsEntity.getTotalItems());
+                orderDetailsCompleteDto.setDeliveryCharges(orderDetailsEntity.getDeliveryCharges());
+                orderDetailsCompleteDto.setTotalAmount(orderDetailsEntity.getTotalAmount());
+                orderDetailsCompleteDto.setOrderState(orderDetailsEntity.getOrderState());
+                orderDetailsCompleteDtoList.add(orderDetailsCompleteDto);
+            }
+            return  orderDetailsCompleteDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<OrderDetailsCompleteDto> searchByDeliveryDateBetween(LocalDate beforeDate, LocalDate afterDate) {
+        List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository
+                .findByDeliveryDateBetween(beforeDate, afterDate);
+        if (!orderDetailsEntityList.isEmpty()) {
+            List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList =
+                    convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
+            return orderDetailsCompleteDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<OrderDetailsCompleteDto> searchByDeliveryDateBefore(LocalDate beforeDate) {
+        List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository
+                .findByDeliveryDateLessThanEqual(beforeDate);
+        if (!orderDetailsEntityList.isEmpty()) {
+            List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList =
+                    convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
+            return orderDetailsCompleteDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<OrderDetailsCompleteDto> searchByDeliveryDateAfter(LocalDate afterDate) {
+        List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository
+                .findByDeliveryDateGreaterThanEqual(afterDate);
+        if (!orderDetailsEntityList.isEmpty()) {
+            List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList =
+                    convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
+            return orderDetailsCompleteDtoList;
         }
         return new ArrayList<>();
     }

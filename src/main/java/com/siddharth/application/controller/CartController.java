@@ -5,10 +5,12 @@ import com.siddharth.application.entity.CartOrWishlistEntity;
 import com.siddharth.application.serviceImpl.CartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -77,5 +79,26 @@ public class CartController {
     @GetMapping(value = "/getMyOrders")
     private ResponseEntity<List<OrderDetailsDto>> getMyOrderDetails(@RequestParam Long userId) {
         return new ResponseEntity<>(cartServiceImpl.getMyOrders(userId), HttpStatus.OK);
+    }
+
+    // get all complete order details by user id
+    @GetMapping(value = "/getMyOrdersCompleteDetails")
+    private ResponseEntity<List<OrderDetailsCompleteDto>> getMyOrdersCompleteDetails(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.getMyOrdersCompleteDetails(userId), HttpStatus.OK);
+    }
+
+    // search orders by delivered date before or after or in between the dates
+    @GetMapping(value = "/searchOrdersByDeliveryDate")
+    private ResponseEntity<List<OrderDetailsCompleteDto>> searchByDeliveryDateBeforeOrAfterOrBetween(
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate beforeDate,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate afterDate) {
+
+        if (beforeDate != null && afterDate == null) {
+            return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateBefore(beforeDate), HttpStatus.OK);
+        } else if (afterDate != null && beforeDate == null) {
+            return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateAfter(afterDate), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateBetween(beforeDate, afterDate), HttpStatus.OK);
+        }
     }
 }
