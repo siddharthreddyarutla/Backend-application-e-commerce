@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -225,11 +226,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public String updateOrderState(Long orderId, String orderState) {
         if (!orderState.isEmpty()) {
-            OrderDetailsEntity orderDetailsEntity = orderDetailsRepository.findByOrderId(orderId);
-            if (ObjectUtils.isNotEmpty(orderDetailsEntity)) {
-                orderDetailsEntity.setOrderState(orderState);
-                orderDetailsRepository.save(orderDetailsEntity);
-                return orderState;
+            List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByOrderId(orderId);
+            for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntityList) {
+                if (ObjectUtils.isNotEmpty(orderDetailsEntity)) {
+                    orderDetailsEntity.setOrderState(orderState);
+                    orderDetailsRepository.save(orderDetailsEntity);
+                    return orderState;
+                }
             }
         }
         return null;
@@ -359,6 +362,147 @@ public class CartServiceImpl implements CartService {
                     convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
             return orderDetailsCompleteDtoList;
         }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<OrderDetailsCompleteDto> getCancelledOrders(Long userId) {
+        List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByUserId(userId);
+
+        List<OrderDetailsEntity> orderDetailsEntities = new ArrayList<>();
+        for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntityList) {
+            if (orderDetailsEntity.getOrderState().equals(CANCELLED)) {
+                orderDetailsEntities.add(orderDetailsEntity);
+            }
+        }
+        if (!orderDetailsEntities.isEmpty()) {
+            List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList =
+                    convertToOrderDetailsCompleteDetailsDto(orderDetailsEntities);
+            return orderDetailsCompleteDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    //You can search by product title, order number, brand, category, or recipient name.
+    @Override
+    public List<OrderDetailsCompleteDto> searchByAttributesInOrderDetails(Long userId, String attribute) {
+        // find by user id to get related order details to search or filter
+        List<OrderDetailsEntity> orderDetailsEntities = orderDetailsRepository.findByUserId(userId);
+
+        // the list to store and return the searched order details list based on attribute
+        List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList = new ArrayList<>();
+        // to store the list of products on search on title, brand, category
+        List<ProductEntity> productEntityList = new ArrayList<>();
+        if (attribute != null && userId != null) {
+            // search by title
+            List<ProductEntity> productEntityList1 = productRepository.findByTitle(attribute);
+            // search by brand
+            List<ProductEntity> productEntityList2  =productRepository.findByBrand(attribute);
+            // search by category
+            List<ProductEntity> productEntityList3 = productRepository.findByCategory(attribute);
+
+            if (!productEntityList1.isEmpty()) {
+                productEntityList.addAll(productEntityList1);
+            }
+            if (!productEntityList2.isEmpty()) {
+                productEntityList.addAll(productEntityList2);
+            }
+            if (!productEntityList3.isEmpty()) {
+                productEntityList.addAll(productEntityList3);
+            }
+
+            // search by recipient name
+            List<UserAddressEntity> userAddressEntityList = userAddressRepository.findByFullName(attribute);
+
+            // to add all product entities list those are matched or got on search
+            List<ProductEntity> productEntities = new ArrayList<>();
+            // creating a constructor for adding the list of product list
+            OrderDetailsCompleteDto orderDetailsCompleteDto = new OrderDetailsCompleteDto();
+            // to get addressId to map the address and to add in constructor to return
+            Long addressId = null;
+            if (!productEntityList.isEmpty()) {
+                for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
+                    String[] productIds = orderDetailsEntity.getProductId().split(",");
+                    for (ProductEntity productEntity : productEntityList) {
+                        for (String productId : productIds) {
+                            if (productEntity.getProductId().equals(Long.valueOf(productId))) {
+                                productEntities.add(productEntity);
+                                addressId = orderDetailsEntity.getAddressId();
+                                orderDetailsCompleteDto.setOrderPlacedDate(orderDetailsEntity.getOrderPlacedDate());
+                                orderDetailsCompleteDto.setDeliveryDate(orderDetailsEntity.getDeliveryDate());
+                                orderDetailsCompleteDto.setPaymentMethod(orderDetailsEntity.getPaymentMethod());
+                                orderDetailsCompleteDto.setTotalItems(orderDetailsEntity.getTotalItems());
+                                orderDetailsCompleteDto.setDeliveryCharges(orderDetailsEntity.getDeliveryCharges());
+                                orderDetailsCompleteDto.setTotalAmount(orderDetailsEntity.getTotalAmount());
+                                orderDetailsCompleteDto.setOrderState(orderDetailsEntity.getOrderState());
+                            }
+                        }
+                    }
+                }
+            }
+
+            // find by addressId to add into the orderDetailsCompleteDto
+            UserAddressEntity userAddressEntity = userAddressRepository.findByAddressId(addressId);
+            // set user address dto in orderDetailsCompleteDto
+            if (ObjectUtils.isNotEmpty(userAddressEntity)) {
+                orderDetailsCompleteDto.setUserAddressDto(userAddressEntity.toUserAddressDto());
+            }
+
+            // converting product entity list to product dto list to add in orderDetailsCompleteDto
+            List<ProductDto> productDtoList = new ArrayList<>();
+            if (!productEntities.isEmpty()) {
+                for (ProductEntity productEntity : productEntities) {
+                    productDtoList.add(productEntity.toProductDto());
+                }
+            }
+
+            // set product list in orderDetailsCompleteDto
+            if (!productDtoList.isEmpty()) {
+                orderDetailsCompleteDto.setProductDtoList(productDtoList);
+            }
+            // add in temporary list
+            List<OrderDetailsCompleteDto> orderDetailsCompleteDtoList1 = new ArrayList<>();
+            if (ObjectUtils.isNotEmpty(orderDetailsCompleteDto)) {
+                orderDetailsCompleteDtoList1.add(orderDetailsCompleteDto);
+            }
+            // adding the temp list in final orderDetailsCompleteDtoList
+            if (!orderDetailsCompleteDtoList1.isEmpty()) {
+                orderDetailsCompleteDtoList.addAll(orderDetailsCompleteDtoList1);
+            }
+
+            try {
+                // find by orderId
+                Long orderId = Long.valueOf(attribute);
+                List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByOrderId(orderId);
+
+                // converting to orderDetailsCompleteDtoList
+                if (!orderDetailsEntityList.isEmpty()) {
+                    orderDetailsCompleteDtoList = convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid attribute value. Unable to convert to Long.");
+                e.printStackTrace();
+            }
+
+            // to add user address entity found by recipient name and adding it to final list
+            List<OrderDetailsEntity> orderDetailsEntityList = new ArrayList<>();
+            if (!userAddressEntityList.isEmpty()) {
+                for (UserAddressEntity userAddressEntity1 : userAddressEntityList) {
+                    for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntities) {
+                        if (userAddressEntity1.getAddressId().equals(orderDetailsEntity.getAddressId())) {
+                            orderDetailsEntityList.add(orderDetailsEntity);
+                        }
+                    }
+                }
+                orderDetailsCompleteDtoList =
+                        convertToOrderDetailsCompleteDetailsDto(orderDetailsEntityList);
+            }
+        }
+        // at the end check whether there is any match in search and add to orderDetailsCompleteDtoList and return
+        if (!orderDetailsCompleteDtoList.isEmpty()) {
+            return orderDetailsCompleteDtoList;
+        }
+        // else return empty list
         return new ArrayList<>();
     }
 }

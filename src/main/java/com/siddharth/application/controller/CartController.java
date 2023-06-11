@@ -1,5 +1,6 @@
 package com.siddharth.application.controller;
 
+import com.siddharth.application.constants.OrderConstants;
 import com.siddharth.application.dto.*;
 import com.siddharth.application.entity.CartOrWishlistEntity;
 import com.siddharth.application.serviceImpl.CartServiceImpl;
@@ -101,4 +102,19 @@ public class CartController {
             return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateBetween(beforeDate, afterDate), HttpStatus.OK);
         }
     }
+
+    // get order details of orders cancelled
+    @GetMapping(value = "/getCanceledOrderDetails")
+    private ResponseEntity<List<OrderDetailsCompleteDto>> getCanceledOrderDetails(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.getCancelledOrders(userId), HttpStatus.OK);
+    }
+
+    //You can search by product title, order number, brand, category, or recipient name.
+    @GetMapping(value = "/searchByTitleByOrderByBrandByCategoryByReeceipientNameInOrderDetails")
+    private ResponseEntity<List<OrderDetailsCompleteDto>> getSearchDataInOrderDetails(@RequestParam Long userId,
+                                                                                      @RequestParam String attribute) {
+        return new ResponseEntity<>(cartServiceImpl
+                .searchByAttributesInOrderDetails(userId, attribute), HttpStatus.OK);
+    }
 }
+

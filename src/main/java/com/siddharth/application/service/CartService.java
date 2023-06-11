@@ -33,4 +33,8 @@ public interface CartService {
     List<OrderDetailsCompleteDto> searchByDeliveryDateBefore(LocalDate beforeDate);
 
     List<OrderDetailsCompleteDto> searchByDeliveryDateAfter(LocalDate afterDate);
+
+    List<OrderDetailsCompleteDto> getCancelledOrders(Long userId);
+
+    List<OrderDetailsCompleteDto> searchByAttributesInOrderDetails(Long userId, String attribute);
 }

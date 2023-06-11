@@ -10,4 +10,5 @@ import java.util.List;
 public interface UserAddressRepository extends JpaRepository<UserAddressEntity, Long> {
     List<UserAddressEntity> findByUserId(Long userId);
     UserAddressEntity findByAddressId(Long addressId);
+    List<UserAddressEntity> findByFullName(String name);
 }

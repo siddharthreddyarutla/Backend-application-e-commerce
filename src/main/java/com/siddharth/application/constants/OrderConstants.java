@@ -6,4 +6,5 @@ public class OrderConstants {
     public static final String CART = "IN CART";
     public static final String WISHLIST = "IN WISHLIST";
     public static final String ORDERED = "ORDERED";
+    public static final String CANCELLED = "CANCELLED";
 }

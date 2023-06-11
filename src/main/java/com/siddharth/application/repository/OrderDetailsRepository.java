@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface OrderDetailsRepository extends JpaRepository<OrderDetailsEntity, Long> {
 
-    OrderDetailsEntity findByOrderId(Long orderId);
+    List<OrderDetailsEntity> findByOrderId(Long orderId);
     List<OrderDetailsEntity> findByUserId(Long userid);
     List<OrderDetailsEntity> findByDeliveryDateLessThanEqual(LocalDate beforeDate);
     List<OrderDetailsEntity> findByDeliveryDateGreaterThanEqual(LocalDate afterDate);
