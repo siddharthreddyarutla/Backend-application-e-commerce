@@ -1,8 +1,8 @@
 package com.siddharth.application.service;
 
-import com.siddharth.application.dto.UserAddressDto;
-import com.siddharth.application.dto.UserDto;
-import com.siddharth.application.dto.UserLoginDto;
+import com.siddharth.application.dto.userDtos.UserAddressDto;
+import com.siddharth.application.dto.userDtos.UserDto;
+import com.siddharth.application.dto.userDtos.UserLoginDto;
 
 import java.util.List;
 

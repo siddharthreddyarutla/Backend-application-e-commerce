@@ -1,13 +1,13 @@
 package com.siddharth.application.serviceImpl;
 
-import com.siddharth.application.dto.ProductCompleteDetailsDto;
-import com.siddharth.application.dto.ProductDto;
-import com.siddharth.application.dto.ProductInfoDto;
-import com.siddharth.application.dto.ProductPrimaryDto;
-import com.siddharth.application.entity.ProductEntity;
-import com.siddharth.application.entity.ProductInfoEntity;
-import com.siddharth.application.repository.ProductInfoRepository;
-import com.siddharth.application.repository.ProductRepository;
+import com.siddharth.application.dto.productDtos.ProductCompleteDetailsDto;
+import com.siddharth.application.dto.productDtos.ProductDto;
+import com.siddharth.application.dto.productDtos.ProductInfoDto;
+import com.siddharth.application.dto.productDtos.ProductPrimaryDto;
+import com.siddharth.application.entity.productEntities.ProductEntity;
+import com.siddharth.application.entity.productEntities.ProductInfoEntity;
+import com.siddharth.application.repository.productRepositories.ProductInfoRepository;
+import com.siddharth.application.repository.productRepositories.ProductRepository;
 import com.siddharth.application.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 import static com.siddharth.application.constants.Constants.*;
 import static com.siddharth.application.constants.OrderConstants.*;

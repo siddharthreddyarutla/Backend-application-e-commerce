@@ -1,8 +1,8 @@
 package com.siddharth.application.controller;
 
-import com.siddharth.application.dto.UserAddressDto;
-import com.siddharth.application.dto.UserDto;
-import com.siddharth.application.dto.UserLoginDto;
+import com.siddharth.application.dto.userDtos.UserAddressDto;
+import com.siddharth.application.dto.userDtos.UserDto;
+import com.siddharth.application.dto.userDtos.UserLoginDto;
 import com.siddharth.application.serviceImpl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

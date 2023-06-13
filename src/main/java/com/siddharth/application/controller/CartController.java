@@ -1,11 +1,13 @@
 package com.siddharth.application.controller;
 
-import com.siddharth.application.constants.OrderConstants;
-import com.siddharth.application.dto.*;
-import com.siddharth.application.entity.CartOrWishlistEntity;
+import com.siddharth.application.dto.cartDtos.CartCompleteDto;
+import com.siddharth.application.dto.cartDtos.CartOrWishlistDto;
+import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
+import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
+import com.siddharth.application.dto.orderDtos.PreOrderDetailsDto;
+import com.siddharth.application.dto.productDtos.ProductDto;
 import com.siddharth.application.serviceImpl.CartServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,12 +54,6 @@ public class CartController {
         return new ResponseEntity<>(cartServiceImpl.deleteProductFromCart(userId, productId), HttpStatus.OK);
     }
 
-    // buy or order products from the cart
-    @PostMapping(value = "/orderProductItems")
-    private ResponseEntity<OrderDetailsDto> orderProducts(@RequestBody OrderDetailsDto orderDetailsDto) {
-        return new ResponseEntity<>(cartServiceImpl.orderProductItems(orderDetailsDto), HttpStatus.OK);
-    }
-
     // set orderState
     @PutMapping(value = "/updateOrderState")
     private ResponseEntity<String> updateOrderState(@RequestParam Long orderId, @RequestParam String orderState) {
@@ -68,53 +64,6 @@ public class CartController {
     @DeleteMapping(value = "/emptyCart")
     private ResponseEntity<String> deleteCart(@RequestParam Long userId) {
         return new ResponseEntity<>(cartServiceImpl.deleteCart(userId), HttpStatus.OK);
-    }
-
-    // get all orders history
-    @GetMapping(value = "/getAllOrders")
-    private ResponseEntity<List<OrderDetailsDto>> getAllOrders() {
-        return new ResponseEntity<>(cartServiceImpl.getAllOrderDetails(), HttpStatus.OK);
-    }
-
-    // get all orders history by user id
-    @GetMapping(value = "/getMyOrders")
-    private ResponseEntity<List<OrderDetailsDto>> getMyOrderDetails(@RequestParam Long userId) {
-        return new ResponseEntity<>(cartServiceImpl.getMyOrders(userId), HttpStatus.OK);
-    }
-
-    // get all complete order details by user id
-    @GetMapping(value = "/getMyOrdersCompleteDetails")
-    private ResponseEntity<List<OrderDetailsCompleteDto>> getMyOrdersCompleteDetails(@RequestParam Long userId) {
-        return new ResponseEntity<>(cartServiceImpl.getMyOrdersCompleteDetails(userId), HttpStatus.OK);
-    }
-
-    // search orders by delivered date before or after or in between the dates
-    @GetMapping(value = "/searchOrdersByDeliveryDate")
-    private ResponseEntity<List<OrderDetailsCompleteDto>> searchByDeliveryDateBeforeOrAfterOrBetween(
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate beforeDate,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate afterDate) {
-
-        if (beforeDate != null && afterDate == null) {
-            return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateBefore(beforeDate), HttpStatus.OK);
-        } else if (afterDate != null && beforeDate == null) {
-            return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateAfter(afterDate), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(cartServiceImpl.searchByDeliveryDateBetween(beforeDate, afterDate), HttpStatus.OK);
-        }
-    }
-
-    // get order details of orders cancelled
-    @GetMapping(value = "/getCanceledOrderDetails")
-    private ResponseEntity<List<OrderDetailsCompleteDto>> getCanceledOrderDetails(@RequestParam Long userId) {
-        return new ResponseEntity<>(cartServiceImpl.getCancelledOrders(userId), HttpStatus.OK);
-    }
-
-    //You can search by product title, order number, brand, category, or recipient name.
-    @GetMapping(value = "/searchByTitleByOrderByBrandByCategoryByReeceipientNameInOrderDetails")
-    private ResponseEntity<List<OrderDetailsCompleteDto>> getSearchDataInOrderDetails(@RequestParam Long userId,
-                                                                                      @RequestParam String attribute) {
-        return new ResponseEntity<>(cartServiceImpl
-                .searchByAttributesInOrderDetails(userId, attribute), HttpStatus.OK);
     }
 }
 

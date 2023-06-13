@@ -1,12 +1,12 @@
 package com.siddharth.application.serviceImpl;
 
-import com.siddharth.application.dto.UserAddressDto;
-import com.siddharth.application.dto.UserDto;
-import com.siddharth.application.dto.UserLoginDto;
-import com.siddharth.application.entity.UserAddressEntity;
-import com.siddharth.application.entity.UserEntity;
-import com.siddharth.application.repository.UserAddressRepository;
-import com.siddharth.application.repository.UserRepository;
+import com.siddharth.application.dto.userDtos.UserAddressDto;
+import com.siddharth.application.dto.userDtos.UserDto;
+import com.siddharth.application.dto.userDtos.UserLoginDto;
+import com.siddharth.application.entity.userEntities.UserAddressEntity;
+import com.siddharth.application.entity.userEntities.UserEntity;
+import com.siddharth.application.repository.userRepositories.UserAddressRepository;
+import com.siddharth.application.repository.userRepositories.UserRepository;
 import com.siddharth.application.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

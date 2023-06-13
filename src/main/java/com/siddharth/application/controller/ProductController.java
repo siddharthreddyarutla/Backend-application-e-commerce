@@ -1,9 +1,9 @@
 package com.siddharth.application.controller;
 
-import com.siddharth.application.dto.ProductCompleteDetailsDto;
-import com.siddharth.application.dto.ProductDto;
-import com.siddharth.application.dto.ProductInfoDto;
-import com.siddharth.application.dto.ProductPrimaryDto;
+import com.siddharth.application.dto.productDtos.ProductCompleteDetailsDto;
+import com.siddharth.application.dto.productDtos.ProductDto;
+import com.siddharth.application.dto.productDtos.ProductInfoDto;
+import com.siddharth.application.dto.productDtos.ProductPrimaryDto;
 import com.siddharth.application.serviceImpl.ProductServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,11 @@
 package com.siddharth.application.service;
 
-import com.siddharth.application.dto.*;
+import com.siddharth.application.dto.cartDtos.CartCompleteDto;
+import com.siddharth.application.dto.cartDtos.CartOrWishlistDto;
+import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
+import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
+import com.siddharth.application.dto.orderDtos.PreOrderDetailsDto;
+import com.siddharth.application.dto.productDtos.ProductDto;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -16,25 +21,8 @@ public interface CartService {
 
     String deleteProductFromCart(Long userId, Long productId);
 
-    OrderDetailsDto orderProductItems(OrderDetailsDto orderDetailsDto);
-
     String updateOrderState(Long orderId, String orderState);
 
     String deleteCart(Long userId);
 
-    List<OrderDetailsDto> getAllOrderDetails();
-
-    List<OrderDetailsDto> getMyOrders(Long userId);
-
-    List<OrderDetailsCompleteDto> getMyOrdersCompleteDetails(Long userId);
-
-    List<OrderDetailsCompleteDto> searchByDeliveryDateBetween(LocalDate beforeDate, LocalDate  afterDate);
-
-    List<OrderDetailsCompleteDto> searchByDeliveryDateBefore(LocalDate beforeDate);
-
-    List<OrderDetailsCompleteDto> searchByDeliveryDateAfter(LocalDate afterDate);
-
-    List<OrderDetailsCompleteDto> getCancelledOrders(Long userId);
-
-    List<OrderDetailsCompleteDto> searchByAttributesInOrderDetails(Long userId, String attribute);
 }
