@@ -2,18 +2,15 @@ package com.siddharth.application.serviceImpl;
 
 import com.siddharth.application.dto.cartDtos.CartCompleteDto;
 import com.siddharth.application.dto.cartDtos.CartOrWishlistDto;
-import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
-import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
 import com.siddharth.application.dto.orderDtos.PreOrderDetailsDto;
 import com.siddharth.application.dto.productDtos.ProductDto;
 import com.siddharth.application.entity.cartEntities.CartOrWishlistEntity;
-import com.siddharth.application.entity.orderEntities.OrderDetailsEntity;
+import com.siddharth.application.entity.orderEntities.OrdersEntity;
 import com.siddharth.application.entity.orderEntities.PreOrderDetailsEntity;
 import com.siddharth.application.entity.productEntities.ProductEntity;
 import com.siddharth.application.entity.productEntities.ProductInfoEntity;
-import com.siddharth.application.entity.userEntities.UserAddressEntity;
 import com.siddharth.application.repository.cartRepositories.CartRepository;
-import com.siddharth.application.repository.orderRepositories.OrderDetailsRepository;
+import com.siddharth.application.repository.orderRepositories.OrdersRepository;
 import com.siddharth.application.repository.orderRepositories.PreOrderDetailsRepository;
 import com.siddharth.application.repository.productRepositories.ProductInfoRepository;
 import com.siddharth.application.repository.productRepositories.ProductRepository;
@@ -50,7 +47,7 @@ public class CartServiceImpl implements CartService {
     PreOrderDetailsRepository preOrderDetailsRepository;
 
     @Autowired
-    OrderDetailsRepository orderDetailsRepository;
+    OrdersRepository orderDetailsRepository;
 
     @Autowired
     UserAddressRepository userAddressRepository;
@@ -209,8 +206,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public String updateOrderState(Long orderId, String orderState) {
         if (!orderState.isEmpty()) {
-            List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByOrderId(orderId);
-            for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntityList) {
+            List<OrdersEntity> orderDetailsEntityList = orderDetailsRepository.findByOrderId(orderId);
+            for (OrdersEntity orderDetailsEntity : orderDetailsEntityList) {
                 if (ObjectUtils.isNotEmpty(orderDetailsEntity)) {
                     orderDetailsEntity.setOrderState(orderState);
                     orderDetailsRepository.save(orderDetailsEntity);

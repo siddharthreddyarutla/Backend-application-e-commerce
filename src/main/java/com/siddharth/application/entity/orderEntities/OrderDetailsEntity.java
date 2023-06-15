@@ -1,13 +1,11 @@
 package com.siddharth.application.entity.orderEntities;
 
-import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Data
 @Builder
@@ -16,35 +14,26 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "ORDER_DETAILS")
 public class OrderDetailsEntity {
+
     @Id
+    @Column(name = "ORDER_DETAILS_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long orderDetailsId;
     @Column(name = "ORDER_ID")
     private Long orderId;
-    @Column(name = "USER_ID")
-    private Long userId;
-    @Column(name = "ADDRESS_ID")
-    private Long addressId;
-    @Column(name = "PRODUCT_ID")
-    private String productId;
-    @Column(name = "ORDER_PLACED_DATE")
-    private LocalDate orderPlacedDate;
-    @Column(name = "DELIVERY_DATE")
-    private LocalDate deliveryDate;
+    @Column(name = "SHIPPING_ADDRESS_ID")
+    private Long shippingAddressId;
+    @Column(name = "BILLING_ADDRESS_ID")
+    private Long billingAddressId;
     @Column(name = "PAYMENT_METHOD")
     private String paymentMethod;
     @Column(name = "TOTAL_ITEMS")
     private Long totalItems;
     @Column(name = "DELIVERY_CHARGES")
     private Long deliveryCharges;
+    @Column(name = "TAX_CHARGES")
+    private Long taxCharges;
     @Column(name = "TOTAL_AMOUNT")
     private Double totalAmount;
-    @Column(name = "ORDER_STATE")
-    private String orderState;
 
-    public OrderDetailsDto toOrderDetailsEntity() {
-        return OrderDetailsDto.builder().userId(userId).addressId(addressId).productId(productId)
-                .orderPlacedDate(orderPlacedDate).deliveryDate(deliveryDate).paymentMethod(paymentMethod)
-                .totalItems(totalItems).deliveryCharges(deliveryCharges).totalAmount(totalAmount).orderState(orderState)
-                .build();
-    }
 }

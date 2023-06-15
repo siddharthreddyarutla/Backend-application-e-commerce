@@ -6,27 +6,25 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDetailsDto {
-    private Long userId;
-    private Long addressId;
-    private String productId;
-    private LocalDate orderPlacedDate;
-    private LocalDate deliveryDate;
+
+    private Long orderId;
+    private Long shippingAddressId;
+    private Long billingAddressId;
     private String paymentMethod;
     private Long totalItems;
     private Long deliveryCharges;
+    private Long taxCharges;
     private Double totalAmount;
-    private String orderState;
+
     public OrderDetailsEntity toOrderDetailsEntity() {
-        return OrderDetailsEntity.builder().userId(userId).addressId(addressId).productId(productId)
-                .orderPlacedDate(orderPlacedDate).deliveryDate(deliveryDate).paymentMethod(paymentMethod)
-                .totalItems(totalItems).deliveryCharges(deliveryCharges).totalAmount(totalAmount).orderState(orderState)
-                .build();
+        return OrderDetailsEntity.builder().orderId(orderId).shippingAddressId(shippingAddressId)
+                .billingAddressId(billingAddressId).paymentMethod(paymentMethod).totalItems(totalItems)
+                .deliveryCharges(deliveryCharges).taxCharges(taxCharges).totalAmount(totalAmount).build();
     }
 }
