@@ -19,4 +19,5 @@ public class Constants {
     public static final String ITEM_REMOVED_FROM_CART = "ITEM REMOVED SUCCESSFULLY FROM THE CART";
     public static final String ERROR_REMOVING_ITEM_FROM_CART = "ERROR WHILE REMOVING ITEM FROM THE CART";
     public static final String CART_IS_EMPTY = "CART IS EMPTIED";
+    public static final String CART_EDITED = "CART EDITED SUCCESSFULLY";
 }

@@ -22,4 +22,5 @@ public interface CartService {
 
     String deleteCart(Long userId);
 
+    String editProductQuantityInCart(Long userId, Long productId, Long quantity);
 }

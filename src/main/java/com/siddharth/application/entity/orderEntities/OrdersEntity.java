@@ -26,6 +26,8 @@ public class OrdersEntity {
     private Long addressId;
     @Column(name = "PRODUCT_ID")
     private Long productId;
+    @Column(name = "QUANTITY")
+    private Long quantity;
     @Column(name = "ORDER_PLACED_DATE")
     private LocalDate orderPlacedDate;
     @Column(name = "DELIVERY_DATE")
@@ -35,7 +37,8 @@ public class OrdersEntity {
 
     public OrdersDto toOrdersDto() {
         return OrdersDto.builder().orderId(orderId).userId(userId).addressId(addressId).productId(productId)
-                .orderPlacedDate(orderPlacedDate).deliveryDate(deliveryDate).orderState(orderState).build();
+                .quantity(quantity).orderPlacedDate(orderPlacedDate).deliveryDate(deliveryDate)
+                .orderState(orderState).build();
     }
 
 }

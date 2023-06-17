@@ -231,4 +231,18 @@ public class CartServiceImpl implements CartService {
         }
         return null;
     }
+
+    @Override
+    public String editProductQuantityInCart(Long userId, Long productId, Long quantity) {
+        CartOrWishlistEntity cartOrWishlistEntity = cartRepository.findByUserIdAndProductId(userId, productId);
+
+        if (ObjectUtils.isNotEmpty(cartOrWishlistEntity)) {
+            if (quantity != null) {
+                cartOrWishlistEntity.setQuantity(quantity);
+                cartRepository.save(cartOrWishlistEntity);
+                postPreOrderDetailsForCart(cartOrWishlistEntity.getUserId());
+            }
+        }
+        return CART_EDITED;
+    }
 }

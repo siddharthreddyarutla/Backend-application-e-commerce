@@ -1,5 +1,7 @@
 package com.siddharth.application.serviceImpl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONObject;
 import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
 import com.siddharth.application.dto.orderDtos.OrdersDto;
 import com.siddharth.application.entity.orderEntities.OrderDetailsEntity;
@@ -46,16 +48,21 @@ public class OrderServiceImpl implements OrderService {
 
 
     @Override
-    public List<OrdersDto> orderProductItems(Long userId, List<Long> productIds, Long shippingAddressId,
-                                             Long billingAddressId, String paymentMode) {
-        if (userId != null && shippingAddressId != null && !productIds.isEmpty()) {
+    public List<OrdersDto> orderProductItems(Long userId, List<Long> productIdList,List<Long> productQuantityList,
+                                             Long shippingAddressId, Long billingAddressId, String paymentMode) {
+        if (userId != null && shippingAddressId != null && !productIdList.isEmpty()) {
             List<OrdersEntity> ordersEntityList = new ArrayList<>();
             List<OrdersDto> ordersDtoList = new ArrayList<>();
-            for (Long productId : productIds) {
+            for (int id = 0; id < productIdList.size(); id++) {
+                Long productId = productIdList.get(id);
+                Long quantity = productQuantityList.get(id);
+
                 OrdersEntity ordersEntity = new OrdersEntity();
                 ordersEntity.setUserId(userId);
                 ordersEntity.setAddressId(shippingAddressId);
                 ordersEntity.setProductId(productId);
+                ordersEntity.setQuantity(quantity);
+
                 ProductInfoEntity productInfoEntity = productInfoRepository.findByProductId(productId);
                 if (ObjectUtils.isNotEmpty(productInfoEntity)) {
                     LocalDate deliveryDate = productInfoEntity.getDeliveryDate();
@@ -67,11 +74,12 @@ public class OrderServiceImpl implements OrderService {
                     ordersEntityList.add(ordersEntity);
                 }
             }
+
             if (!ordersEntityList.isEmpty()) {
                 for (OrdersEntity ordersEntity : ordersEntityList) {
                     ordersRepository.save(ordersEntity);
                     Long orderId = ordersEntity.getOrderId();
-                    saveOrderDetails(orderId,productIds, billingAddressId, shippingAddressId, paymentMode);
+                    saveOrderDetails(orderId,productIdList,productQuantityList, billingAddressId, shippingAddressId, paymentMode);
                     ordersDtoList.add(ordersEntity.toOrdersDto());
                 }
             }
@@ -80,31 +88,45 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-    private void saveOrderDetails(Long orderId, List<Long> productIds, Long billingAddressId,
+    private void saveOrderDetails(Long orderId, List<Long> productIdList,List<Long> productQuantityList, Long billingAddressId,
                                   Long shippingAddressId, String paymentMode) {
-        if (!productIds.isEmpty()) {
+        if (!productIdList.isEmpty()) {
             OrderDetailsDto orderDetailsDto = new OrderDetailsDto();
             Long totalItems = 0L;
             Long deliveryCharges = 0L;
             Double totalAmount = 0D;
+            Double orderAmount = 0D;
             Long taxCharges = 0L;
-            for (Long productId : productIds) {
+            for (int id = 0; id < productIdList.size(); id++) {
+                Long productId = productIdList.get(id);
+                Long quantity = productQuantityList.get(id);
+
                 ProductEntity productEntity = productRepository.findByProductId(productId);
                 totalItems = totalItems + 1;
-                totalAmount = totalAmount + Double.valueOf(productEntity.getPrice());
+                totalAmount = totalAmount + Double.valueOf(productEntity.getPrice()) * quantity;
             }
+
+            JSONObject jsonObject = new JSONObject();
+
+            jsonObject.put("productIds", productIdList);
+            String jsonString = jsonObject.toString();
+            orderDetailsDto.setProductIds(jsonString);
+
             orderDetailsDto.setOrderId(orderId);
             orderDetailsDto.setShippingAddressId(shippingAddressId);
             orderDetailsDto.setBillingAddressId(billingAddressId);
             orderDetailsDto.setPaymentMethod(paymentMode);
             orderDetailsDto.setTotalItems(totalItems);
             if (totalAmount < MINIMUM_DELIVERY_AMOUNT) {
-                totalAmount = totalAmount + DELIVERY_CHARGES;
+                orderAmount = totalAmount + DELIVERY_CHARGES;
                 deliveryCharges = DELIVERY_CHARGES;
+            } else {
+                orderAmount = totalAmount;
             }
             orderDetailsDto.setDeliveryCharges(deliveryCharges);
             orderDetailsDto.setTaxCharges(taxCharges);
             orderDetailsDto.setTotalAmount(totalAmount);
+            orderDetailsDto.setOrderAmount(orderAmount);
             OrderDetailsEntity orderDetailsEntity = orderDetailsDto.toOrderDetailsEntity();
             orderDetailsRepository.save(orderDetailsEntity);
         }
@@ -142,6 +164,39 @@ public class OrderServiceImpl implements OrderService {
                 }
             }
             return ordersDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<OrdersDto> getMyOrdersByUserId(Long userId) {
+        if (userId != null) {
+            List<OrdersEntity> ordersEntityList = ordersRepository.findByUserId(userId);
+            List<OrdersDto> ordersDtoList = new ArrayList<>();
+
+            for (OrdersEntity ordersEntity : ordersEntityList) {
+                if (!ordersEntity.getOrderState().equals(DRAFT)) {
+                    ordersDtoList.add(ordersEntity.toOrdersDto());
+                }
+            }
+            return ordersDtoList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<OrderDetailsDto> getMyOrderDetailsByOrderId(Long orderId) {
+        if (orderId != null) {
+            List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByOrderId(orderId);
+            List<OrderDetailsDto> orderDetailsDtoList = new ArrayList<>();
+
+            if (!orderDetailsEntityList.isEmpty()) {
+                for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntityList) {
+                    orderDetailsEntity.getProductIds().toString();
+                    orderDetailsDtoList.add(orderDetailsEntity.toOrderDetailsDto());
+                }
+            }
+            return orderDetailsDtoList;
         }
         return new ArrayList<>();
     }

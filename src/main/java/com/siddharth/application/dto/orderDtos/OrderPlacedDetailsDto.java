@@ -18,6 +18,6 @@ public class OrderPlacedDetailsDto {
     private StringBuilder completeAddress;
     private String mobileNumber;
     private LocalDate deliveryDate;
-    private String image;
+    private String images;
 }
 

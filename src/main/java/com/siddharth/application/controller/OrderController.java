@@ -1,6 +1,7 @@
 package com.siddharth.application.controller;
 
 import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
+import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
 import com.siddharth.application.dto.orderDtos.OrdersDto;
 import com.siddharth.application.dto.orderDtos.OrderPlacedDetailsDto;
 import com.siddharth.application.serviceImpl.OrderServiceImpl;
@@ -26,11 +27,11 @@ public class OrderController {
      * here everything will be in draft state until finally the is order placed
      */
     @PostMapping(value = "/orderProductItems")
-    private ResponseEntity<List<OrdersDto>> orderProducts(@RequestParam Long userId, @RequestParam List<Long> productIds,
-                                                          @RequestParam Long shippingAddressId, @RequestParam Long
+    private ResponseEntity<List<OrdersDto>> orderProducts(@RequestParam Long userId, @RequestParam List<Long> productIdList,
+                                                          @RequestParam List<Long> productQuantityList, @RequestParam Long shippingAddressId, @RequestParam Long
                                                           billingAddressId, @RequestParam String paymentMode) {
-        return new ResponseEntity<>(orderServiceImpl.orderProductItems(userId, productIds, shippingAddressId,
-                billingAddressId, paymentMode), HttpStatus.OK);
+        return new ResponseEntity<>(orderServiceImpl.orderProductItems(userId, productIdList, productQuantityList,
+                shippingAddressId, billingAddressId, paymentMode), HttpStatus.OK);
     }
 
     // handles if user cancels in any step until the final order is placed
@@ -51,4 +52,18 @@ public class OrderController {
                                                                    @RequestParam String orderState) {
         return new ResponseEntity<>(orderServiceImpl.editOrderStateInMyOrders(orderIds, orderState), HttpStatus.OK);
     }
+
+    // get my orders by userId
+    @GetMapping(value = "/getMyOrdersByUserId")
+    private ResponseEntity<List<OrdersDto>> getMyOrdersByUserId(@RequestParam Long userId) {
+        return new ResponseEntity<>(orderServiceImpl.getMyOrdersByUserId(userId),HttpStatus.OK);
+    }
+
+    // get my complete order details by orderId
+    @GetMapping(value = "/getMyOrderDetailsByOrderId")
+    private ResponseEntity<List<OrderDetailsDto>> getMyOrderDetails(@RequestParam Long orderId) {
+        return new ResponseEntity<>(orderServiceImpl.getMyOrderDetailsByOrderId(orderId),
+                HttpStatus.OK);
+    }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -60,6 +61,13 @@ public class CartController {
     @DeleteMapping(value = "/emptyCart")
     private ResponseEntity<String> deleteCart(@RequestParam Long userId) {
         return new ResponseEntity<>(cartServiceImpl.deleteCart(userId), HttpStatus.OK);
+    }
+
+    // edit quantity in the cart
+    @PutMapping(value = "/editProductQuantityInCart")
+    private ResponseEntity<String> editQuantityOfProductInCart(@RequestParam Long userId,  @RequestParam Long productId,
+                                                               @RequestParam Long quantity) {
+        return new ResponseEntity<>(cartServiceImpl.editProductQuantityInCart(userId, productId, quantity), HttpStatus.OK);
     }
 }
 
