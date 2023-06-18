@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 
 import javax.persistence.*;
 
@@ -15,7 +14,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "CART")
-public class CartOrWishlistEntity {
+public class CartEntity {
     @Id
     @Column(name = "CART_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

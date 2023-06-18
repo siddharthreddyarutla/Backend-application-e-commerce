@@ -1,7 +1,8 @@
 package com.siddharth.application.controller;
 
 import com.siddharth.application.dto.cartDtos.CartCompleteDto;
-import com.siddharth.application.dto.cartDtos.CartOrWishlistDto;
+import com.siddharth.application.dto.cartDtos.CartDto;
+import com.siddharth.application.dto.cartDtos.CartPreOrderDetailsAndCartDto;
 import com.siddharth.application.dto.orderDtos.PreOrderDetailsDto;
 import com.siddharth.application.dto.productDtos.ProductDto;
 import com.siddharth.application.serviceImpl.CartServiceImpl;
@@ -10,7 +11,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -23,8 +23,8 @@ public class CartController {
 
     // add to cart
     @PostMapping(value = "/addToCart")
-    private ResponseEntity<CartOrWishlistDto> addToCart(@RequestBody CartOrWishlistDto cartOrWishlistDto) {
-        return new ResponseEntity<>(cartServiceImpl.addToCart(cartOrWishlistDto), HttpStatus.OK);
+    private ResponseEntity<CartDto> addToCart(@RequestBody CartDto cartDto) {
+        return new ResponseEntity<>(cartServiceImpl.addToCart(cartDto), HttpStatus.OK);
     }
 
     // get products added to cart
@@ -47,7 +47,7 @@ public class CartController {
 
     // remove product from the cart
     @DeleteMapping(value = "/removeProductFromCart")
-    private ResponseEntity<String> removeItemFromCart(@RequestParam Long userId, @RequestParam Long productId) {
+    private ResponseEntity<CartPreOrderDetailsAndCartDto> removeItemFromCart(@RequestParam Long userId, @RequestParam Long productId) {
         return new ResponseEntity<>(cartServiceImpl.deleteProductFromCart(userId, productId), HttpStatus.OK);
     }
 
@@ -65,7 +65,7 @@ public class CartController {
 
     // edit quantity in the cart
     @PutMapping(value = "/editProductQuantityInCart")
-    private ResponseEntity<String> editQuantityOfProductInCart(@RequestParam Long userId,  @RequestParam Long productId,
+    private ResponseEntity<PreOrderDetailsDto> editQuantityOfProductInCart(@RequestParam Long userId,  @RequestParam Long productId,
                                                                @RequestParam Long quantity) {
         return new ResponseEntity<>(cartServiceImpl.editProductQuantityInCart(userId, productId, quantity), HttpStatus.OK);
     }

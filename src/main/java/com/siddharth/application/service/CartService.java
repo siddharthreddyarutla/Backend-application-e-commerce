@@ -1,14 +1,15 @@
 package com.siddharth.application.service;
 
 import com.siddharth.application.dto.cartDtos.CartCompleteDto;
-import com.siddharth.application.dto.cartDtos.CartOrWishlistDto;
+import com.siddharth.application.dto.cartDtos.CartDto;
+import com.siddharth.application.dto.cartDtos.CartPreOrderDetailsAndCartDto;
 import com.siddharth.application.dto.orderDtos.PreOrderDetailsDto;
 import com.siddharth.application.dto.productDtos.ProductDto;
 
 import java.util.List;
 
 public interface CartService {
-    CartOrWishlistDto addToCart(CartOrWishlistDto cartOrWishlistDto);
+    CartDto addToCart(CartDto cartDto);
 
     List<ProductDto> getAllProductsFromCart(Long userId);
 
@@ -16,11 +17,11 @@ public interface CartService {
 
     PreOrderDetailsDto getPreOrderDetailsOfCartByUserId(Long userId);
 
-    String deleteProductFromCart(Long userId, Long productId);
+    CartPreOrderDetailsAndCartDto deleteProductFromCart(Long userId, Long productId);
 
     String updateOrderState(Long orderId, String orderState);
 
     String deleteCart(Long userId);
 
-    String editProductQuantityInCart(Long userId, Long productId, Long quantity);
+    PreOrderDetailsDto editProductQuantityInCart(Long userId, Long productId, Long quantity);
 }

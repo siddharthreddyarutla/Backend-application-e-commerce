@@ -1,6 +1,6 @@
 package com.siddharth.application.dto.cartDtos;
 
-import com.siddharth.application.entity.cartEntities.CartOrWishlistEntity;
+import com.siddharth.application.entity.cartEntities.CartEntity;
 import com.siddharth.application.entity.productEntities.ProductEntity;
 import com.siddharth.application.entity.productEntities.ProductInfoEntity;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class CartCompleteDto {
     private Long quantity;
     private String image;
 
-    public CartCompleteDto(CartOrWishlistEntity cartOrWishlistEntity, ProductEntity productEntity,
+    public CartCompleteDto(CartEntity cartOrWishlistEntity, ProductEntity productEntity,
                            ProductInfoEntity productInfoEntity) {
         this.productId = cartOrWishlistEntity.getProductId();
         this.title = productEntity.getTitle();
