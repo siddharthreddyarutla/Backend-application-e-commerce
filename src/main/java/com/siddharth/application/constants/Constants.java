@@ -16,8 +16,8 @@ public class Constants {
     public static final Long MINIMUM_DELIVERY_AMOUNT = 449L;
     public static final Long DELIVERY_CHARGES = 49L;
     public static final String ORDER_ELIGIBLE_FOR_FREE_DELIVERY = "Your order is eligible for FREE Delivery";
-    public static final String ITEM_REMOVED_FROM_CART = "ITEM REMOVED SUCCESSFULLY FROM THE CART";
-    public static final String ERROR_REMOVING_ITEM_FROM_CART = "ERROR WHILE REMOVING ITEM FROM THE CART";
+    public static final String ITEM_REMOVED = "ITEM REMOVED SUCCESSFULLY";
+    public static final String ERROR_REMOVING_ITEM = "ERROR WHILE REMOVING ITEM";
     public static final String CART_IS_EMPTY = "CART IS EMPTIED";
     public static final String CART_EDITED = "CART EDITED SUCCESSFULLY";
 }

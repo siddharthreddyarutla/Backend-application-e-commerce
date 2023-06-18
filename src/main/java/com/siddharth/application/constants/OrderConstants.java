@@ -10,4 +10,5 @@ public class OrderConstants {
     public static final String DRAFT = "DRAFT";
     public static final String DELETED_ORDERS = "DELETED ORDER DETAILS FOR CANCELING BEFORE FINAL ORDER IS PLACED";
     public static final String ORDER_DETAILS_NOT_FOUND = "ORDER DETAILS NOT FOUND";
+    public static final String SAVE_FOR_LATER = "SAVE FOR LATER";
 }

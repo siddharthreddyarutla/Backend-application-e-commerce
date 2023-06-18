@@ -69,5 +69,18 @@ public class CartController {
                                                                @RequestParam Long quantity) {
         return new ResponseEntity<>(cartServiceImpl.editProductQuantityInCart(userId, productId, quantity), HttpStatus.OK);
     }
+
+    // get all complete products that are added to save for later
+    @GetMapping(value = "/getCompleteProductsDetailsAddedToSaveForLater")
+    private ResponseEntity<List<CartCompleteDto>> getAllCompleteProductsAddedToSaveForLater(@RequestParam Long userId) {
+        return new ResponseEntity<>(cartServiceImpl.getAllCompleteProductDetailsAddedToSaveForLater(userId), HttpStatus.OK);
+    }
+
+    // remove product from the cart
+    @DeleteMapping(value = "/removeProductFromSaveForLater")
+    private ResponseEntity<String> removeItemFromSaveForLater(@RequestParam Long userId,
+                                                                                     @RequestParam Long productId) {
+        return new ResponseEntity<>(cartServiceImpl.deleteProductFromSaveForLater(userId, productId), HttpStatus.OK);
+    }
 }
 

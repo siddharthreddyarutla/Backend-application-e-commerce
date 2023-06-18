@@ -24,4 +24,8 @@ public interface CartService {
     String deleteCart(Long userId);
 
     PreOrderDetailsDto editProductQuantityInCart(Long userId, Long productId, Long quantity);
+
+    List<CartCompleteDto> getAllCompleteProductDetailsAddedToSaveForLater(Long userId);
+
+    String deleteProductFromSaveForLater(Long userId, Long productId);
 }

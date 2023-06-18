@@ -55,15 +55,37 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto addToCart(CartDto cartDto) {
-        CartEntity cartOrWishlistEntity = cartRepository
-                .findByUserIdAndProductId(cartDto.getUserId(), cartDto.getProductId());
-        if (cartOrWishlistEntity == null) {
-            CartEntity cartOrWishlistEntity1 = cartDto.toCartOrWishlistEntity();
-            cartRepository.save(cartOrWishlistEntity1);
+        if (cartDto.getCartState().equals(SAVE_FOR_LATER)) {
+            CartEntity cartEntity = cartRepository
+                    .findByUserIdAndProductIdAndCartState(cartDto.getUserId(), cartDto.getProductId(),
+                            cartDto.getCartState());
+
+            if (cartEntity == null) {
+                CartEntity cartEntity1 = cartDto.toCartOrWishlistEntity();
+                cartEntity1.setQuantity(1L);
+                cartRepository.save(cartEntity1);
+            } else {
+                Long quantity = cartEntity.getQuantity() + 1L;
+                cartEntity.setQuantity(quantity);
+                cartRepository.save(cartEntity);
+            }
+            CartEntity cartOrWishlistEntity = cartRepository
+                    .findByUserIdAndProductIdAndCartState(cartDto.getUserId(), cartDto.getProductId(), "IN CART");
+            if (!ObjectUtils.isEmpty(cartOrWishlistEntity)) {
+                cartRepository.delete(cartOrWishlistEntity);
+            }
         } else {
-            Long quantity = cartOrWishlistEntity.getQuantity() + 1L;
-            cartOrWishlistEntity.setQuantity(quantity);
-            cartRepository.save(cartOrWishlistEntity);
+            CartEntity cartEntity = cartRepository
+                    .findByUserIdAndProductIdAndCartState(cartDto.getUserId(), cartDto.getProductId(),
+                            cartDto.getCartState());
+            if (cartEntity == null) {
+                CartEntity cartEntity1 = cartDto.toCartOrWishlistEntity();
+                cartRepository.save(cartEntity1);
+            } else {
+                Long quantity = cartEntity.getQuantity() + 1L;
+                cartEntity.setQuantity(quantity);
+                cartRepository.save(cartEntity);
+            }
         }
         /**
          * Below function is used to post the pre-order details of my cart of the respective user
@@ -74,11 +96,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<ProductDto> getAllProductsFromCart(Long userId) {
-        List<CartEntity> cartOrWishlistEntityList = cartRepository.findByUserId(userId);
+        List<CartEntity> cartEntityList = cartRepository.findByUserId(userId);
 
-        if (!cartOrWishlistEntityList.isEmpty()) {
+        if (!cartEntityList.isEmpty()) {
             List<ProductDto> productDtoList = new ArrayList<>();
-            for (CartEntity cartOrWishlistEntity : cartOrWishlistEntityList) {
+            for (CartEntity cartOrWishlistEntity : cartEntityList) {
                 if (cartOrWishlistEntity.getCartState().equals(CART)) {
                     ProductEntity productEntity = productRepository.findByProductId(cartOrWishlistEntity.getProductId());
                     ProductDto productDto = productEntity.toProductDto();
@@ -92,11 +114,11 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public List<CartCompleteDto> getAllCompleteProductDetailsAddedToCart(Long userId) {
-        List<CartEntity> cartOrWishlistEntityList = cartRepository.findByUserId(userId);
+        List<CartEntity> cartEntityList = cartRepository.findByUserId(userId);
 
-        if (!cartOrWishlistEntityList.isEmpty()) {
+        if (!cartEntityList.isEmpty()) {
             List<CartCompleteDto> cartCompleteDtoList = new ArrayList<>();
-            for (CartEntity cartOrWishlistEntity : cartOrWishlistEntityList) {
+            for (CartEntity cartOrWishlistEntity : cartEntityList) {
                 if (cartOrWishlistEntity.getCartState().equals(CART)) {
                     ProductEntity productEntity = productRepository.findByProductId(cartOrWishlistEntity.getProductId());
                     ProductInfoEntity productInfoEntity = productInfoRepository
@@ -111,16 +133,17 @@ public class CartServiceImpl implements CartService {
         return new ArrayList<>();
     }
 
-    // posting pre-order cart details in the DB when ever the product is added it to cart by the respective user
+    // posting pre-order cart details in the DB when ever the product is added it to cart by the
+    // respective user
     public void postPreOrderDetailsForCart(Long userId) {
-        List<CartEntity> cartOrWishlistEntityList = cartRepository.findByUserId(userId);
+        List<CartEntity> cartEntityList = cartRepository.findByUserIdAndCartState(userId, CART);
 
-        if (!cartOrWishlistEntityList.isEmpty()) {
+        if (!cartEntityList.isEmpty()) {
             PreOrderDetailsDto preOrderDetailsDto = new PreOrderDetailsDto();
             List<LocalDate> deliveryDateList = new ArrayList<>();
             Long totalItemsInCart = 0L;
             Double totalAmount = 0D;
-            for (CartEntity cartOrWishlistEntity : cartOrWishlistEntityList) {
+            for (CartEntity cartOrWishlistEntity : cartEntityList) {
                 Long productId = cartOrWishlistEntity.getProductId();
                 ProductInfoEntity productInfoEntity = productInfoRepository.findByProductId(productId);
                 deliveryDateList.add(productInfoEntity.getDeliveryDate());
@@ -194,7 +217,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartPreOrderDetailsAndCartDto deleteProductFromCart(Long userId, Long productId) {
-        CartEntity cartOrWishlistEntity = cartRepository.findByUserIdAndProductId(userId, productId);
+        CartEntity cartOrWishlistEntity = cartRepository.findByUserIdAndProductIdAndCartState(userId, productId, "IN CART");
         if (!ObjectUtils.isEmpty(cartOrWishlistEntity)) {
             cartRepository.delete(cartOrWishlistEntity);
             // to update pre-order details of cart after deleting items from the cart
@@ -274,7 +297,8 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public PreOrderDetailsDto editProductQuantityInCart(Long userId, Long productId, Long quantity) {
-        CartEntity cartOrWishlistEntity = cartRepository.findByUserIdAndProductId(userId, productId);
+        CartEntity cartOrWishlistEntity = cartRepository.findByUserIdAndProductIdAndCartState(userId, productId,
+                "IN CART");
 
         if (ObjectUtils.isNotEmpty(cartOrWishlistEntity)) {
             if (quantity != null) {
@@ -286,6 +310,39 @@ public class CartServiceImpl implements CartService {
                 if (ObjectUtils.isNotEmpty(preOrderDetailsEntity)) {
                     return preOrderDetailsEntity.toPreOrderDetailsDto();
                 }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<CartCompleteDto> getAllCompleteProductDetailsAddedToSaveForLater(Long userId) {
+        List<CartEntity> cartEntityList = cartRepository.findByUserId(userId);
+
+        if (!cartEntityList.isEmpty()) {
+            List<CartCompleteDto> cartCompleteDtoList = new ArrayList<>();
+            for (CartEntity cartOrWishlistEntity : cartEntityList) {
+                if (cartOrWishlistEntity.getCartState().equals(SAVE_FOR_LATER)) {
+                    ProductEntity productEntity = productRepository.findByProductId(cartOrWishlistEntity.getProductId());
+                    ProductInfoEntity productInfoEntity = productInfoRepository
+                            .findByProductId(cartOrWishlistEntity.getProductId());
+
+                    CartCompleteDto cartCompleteDto = new CartCompleteDto(cartOrWishlistEntity, productEntity, productInfoEntity);
+                    cartCompleteDtoList.add(cartCompleteDto);
+                }
+            }
+            return cartCompleteDtoList;
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public String deleteProductFromSaveForLater(Long userId, Long productId) {
+        if (userId != null && productId != null) {
+            CartEntity cartEntity = cartRepository.findByUserIdAndProductIdAndCartState(userId, productId,
+                    SAVE_FOR_LATER);
+            if (ObjectUtils.isNotEmpty(cartEntity)) {
+                cartRepository.delete(cartEntity);
             }
         }
         return null;
