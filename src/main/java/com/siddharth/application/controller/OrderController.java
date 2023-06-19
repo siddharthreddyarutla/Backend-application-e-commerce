@@ -1,9 +1,6 @@
 package com.siddharth.application.controller;
 
-import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
-import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
-import com.siddharth.application.dto.orderDtos.OrdersDto;
-import com.siddharth.application.dto.orderDtos.OrderPlacedDetailsDto;
+import com.siddharth.application.dto.orderDtos.*;
 import com.siddharth.application.serviceImpl.OrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -55,15 +52,29 @@ public class OrderController {
 
     // get my orders by userId
     @GetMapping(value = "/getMyOrdersByUserId")
-    private ResponseEntity<List<OrdersDto>> getMyOrdersByUserId(@RequestParam Long userId) {
+    private ResponseEntity<List<OrdersCompleteDto>> getMyOrdersByUserId(@RequestParam Long userId) {
         return new ResponseEntity<>(orderServiceImpl.getMyOrdersByUserId(userId),HttpStatus.OK);
     }
 
-    // get my complete order details by orderId
+    // get my order details by orderId
     @GetMapping(value = "/getMyOrderDetailsByOrderId")
     private ResponseEntity<List<OrderDetailsDto>> getMyOrderDetails(@RequestParam Long orderId) {
         return new ResponseEntity<>(orderServiceImpl.getMyOrderDetailsByOrderId(orderId),
                 HttpStatus.OK);
     }
 
+    // get my complete order details by orderId
+    @GetMapping(value = "/getMyCompleteOrderDetails")
+    private ResponseEntity<OrderDetailsCompleteDto> getMyCompleteOrderDetailsByOrderId(@RequestParam Long userId,
+                                                                                       @RequestParam Long orderId) {
+        return new ResponseEntity<>(orderServiceImpl.getMyCompleteOrderDetailsByOrderId(userId, orderId), HttpStatus.OK);
+    }
+
+    // You can search by product title, order number, category, or recipient name.
+    @GetMapping(value = "/searchByProductTitleCategoryOrderIdAndRecipientName")
+    private ResponseEntity<List<OrdersCompleteDto>> searchByProductTitleCategoryOrderIdAndRecipientName(@RequestParam Long userId,
+                                                                                                        @RequestParam String attribute) {
+        return new ResponseEntity<>(orderServiceImpl.searchByProductTitleCategoryOrderIdAddressAndRecipientName(userId,
+                attribute), HttpStatus.OK);
+    }
 }

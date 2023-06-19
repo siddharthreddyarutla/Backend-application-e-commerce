@@ -8,24 +8,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderDetailsCompleteDto {
-
+public class OrdersCompleteDto {
+    private Long orderId;
     private Long userId;
-    private List<ProductDto> productDtoList;
-    private UserAddressDto shippingAddressDto;
-    private UserAddressDto billingAddressDto;
+    private UserAddressDto userAddressDto;
+    private ProductDto productDto;
     private Long quantity;
-    private String paymentMethod;
+    private LocalDate orderPlacedDate;
     private LocalDate deliveryDate;
-    private Long totalItems;
-    private Double totalAmount;
-    private Long deliveryCharges;
-    private Long taxCharges;
-    private Double orderAmount;
+    private String orderState;
 }

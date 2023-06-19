@@ -1,6 +1,10 @@
 package com.siddharth.application.serviceImpl;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
+import com.siddharth.application.dto.orderDtos.OrdersCompleteDto;
+import com.siddharth.application.dto.productDtos.ProductDto;
+import com.siddharth.application.entity.userEntities.UserAddressEntity;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
 import com.siddharth.application.dto.orderDtos.OrdersDto;
@@ -169,19 +173,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrdersDto> getMyOrdersByUserId(Long userId) {
+    public List<OrdersCompleteDto> getMyOrdersByUserId(Long userId) {
         if (userId != null) {
             List<OrdersEntity> ordersEntityList = ordersRepository.findByUserId(userId);
             List<OrdersDto> ordersDtoList = new ArrayList<>();
+            List<OrdersCompleteDto> ordersCompleteDtoList = new ArrayList<>();
 
             for (OrdersEntity ordersEntity : ordersEntityList) {
                 if (!ordersEntity.getOrderState().equals(DRAFT)) {
                     ordersDtoList.add(ordersEntity.toOrdersDto());
                 }
             }
-            return ordersDtoList;
+            if (!ordersDtoList.isEmpty()) {
+                ordersCompleteDtoList = convertOrdersDtoListToOrderCompleteDtoList(ordersDtoList);
+            }
+            return ordersCompleteDtoList;
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Override
@@ -200,4 +208,149 @@ public class OrderServiceImpl implements OrderService {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public OrderDetailsCompleteDto getMyCompleteOrderDetailsByOrderId(Long userId, Long orderId) {
+        OrdersEntity ordersEntity = ordersRepository.findByUserIdAndOrderId(userId, orderId);
+
+        if (ObjectUtils.isNotEmpty(ordersEntity)) {
+            List<OrderDetailsEntity> orderDetailsEntityList = orderDetailsRepository.findByOrderId(orderId);
+
+            if (!orderDetailsEntityList.isEmpty()) {
+                OrderDetailsCompleteDto orderDetailsCompleteDto = new OrderDetailsCompleteDto();
+                for (OrderDetailsEntity orderDetailsEntity : orderDetailsEntityList) {
+                    String productIds = orderDetailsEntity.getProductIds();
+
+                    JSONObject jsonObject = new JSONObject(productIds);
+                    JSONArray productIdsArray = jsonObject.getJSONArray("productIds");
+
+                    List<ProductEntity> productEntityList = new ArrayList<>();
+
+                    for (int id = 0; id < productIdsArray.length(); id++) {
+                        Long productId = productIdsArray.getLong(id);
+                        ProductEntity productEntity = productRepository.findByProductId(productId);
+                        productEntityList.add(productEntity);
+                    }
+
+                    Long shippingAddressId = orderDetailsEntity.getShippingAddressId();
+                    Long billingAddressId = orderDetailsEntity.getBillingAddressId();
+                    UserAddressEntity userShippingAddress = userAddressRepository.findByAddressId(shippingAddressId);
+                    UserAddressEntity userBillingAddress = userAddressRepository.findByAddressId(billingAddressId);
+
+                    List<ProductDto> productDtoList = new ArrayList<>();
+                    for (ProductEntity productEntity : productEntityList) {
+                        productDtoList.add(productEntity.toProductDto());
+                    }
+                    if(!productDtoList.isEmpty()) {
+                        orderDetailsCompleteDto.setProductDtoList(productDtoList);
+                    }
+                    if (ObjectUtils.isNotEmpty(userBillingAddress)) {
+                        orderDetailsCompleteDto.setBillingAddressDto(userBillingAddress.toUserAddressDto());
+                    }
+                    if (ObjectUtils.isNotEmpty(userShippingAddress)) {
+                        orderDetailsCompleteDto.setShippingAddressDto(userShippingAddress.toUserAddressDto());
+                    }
+
+                    orderDetailsCompleteDto.setPaymentMethod(orderDetailsEntity.getPaymentMethod());
+                    orderDetailsCompleteDto.setTotalItems(orderDetailsEntity.getTotalItems());
+                    orderDetailsCompleteDto.setTotalAmount(orderDetailsEntity.getTotalAmount());
+                    orderDetailsCompleteDto.setDeliveryCharges(orderDetailsEntity.getDeliveryCharges());
+                    orderDetailsCompleteDto.setTaxCharges(orderDetailsEntity.getTaxCharges());
+                    orderDetailsCompleteDto.setOrderAmount(orderDetailsEntity.getOrderAmount());
+                    orderDetailsCompleteDto.setQuantity(ordersEntity.getQuantity());
+                    orderDetailsCompleteDto.setDeliveryDate(ordersEntity.getDeliveryDate());
+
+                }
+                if (ObjectUtils.isNotEmpty(orderDetailsCompleteDto)) {
+                    return orderDetailsCompleteDto;
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public List<OrdersCompleteDto> searchByProductTitleCategoryOrderIdAddressAndRecipientName(Long userId, String attribute) {
+        if (userId != null) {
+            List<OrdersEntity> ordersEntityList = ordersRepository.findByUserId(userId);
+            List<OrdersDto> ordersDtoList = new ArrayList<>();
+
+            if (!ordersEntityList.isEmpty()) {
+
+                for (OrdersEntity ordersEntity : ordersEntityList) {
+                    ProductEntity productEntity = productRepository
+                            .findByProductIdAndTitle(ordersEntity.getProductId(), attribute);
+                    ProductEntity productEntity1 = productRepository
+                            .findByProductIdAndCategory(ordersEntity.getProductId(), attribute);
+
+                    if (ObjectUtils.isNotEmpty(productEntity) || ObjectUtils.isNotEmpty(productEntity1)) {
+                        ordersDtoList.add(ordersEntity.toOrdersDto());
+                    }
+
+                    List<OrdersDto> ordersDtoList1 = new ArrayList<>();
+                    try {
+                        Long orderId = Long.valueOf(attribute);
+                        if (orderId == ordersEntity.getOrderId()) {
+                            List<OrdersEntity> ordersEntityList1 = ordersRepository.findByOrderId(orderId);
+                            for (OrdersEntity ordersEntity1 : ordersEntityList1) {
+                                OrdersDto ordersDto = ordersEntity1.toOrdersDto();
+                                if (!ordersDtoList1.contains(ordersDto)) {
+                                    ordersDtoList1.add(ordersDto);
+                                }
+                            }
+                        }
+                    } catch (NumberFormatException e) {
+                        log.info(String.valueOf(e));
+                    }
+                    if (!ordersDtoList1.isEmpty()) {
+                        for (OrdersDto ordersDto : ordersDtoList1) {
+                            ordersDtoList.add(ordersDto);
+                        }
+                    }
+
+                    UserAddressEntity userAddressEntity = userAddressRepository
+                            .findByAddressIdAndFullName(ordersEntity.getAddressId(), attribute);
+
+                    if (ObjectUtils.isNotEmpty(userAddressEntity)) {
+                        ordersDtoList.add(ordersEntity.toOrdersDto());
+                    }
+                }
+            }
+            List<OrdersCompleteDto> ordersCompleteDtoList = new ArrayList<>();
+            if (!ordersDtoList.isEmpty()) {
+                ordersCompleteDtoList = convertOrdersDtoListToOrderCompleteDtoList(ordersDtoList);
+            }
+            if (!ordersCompleteDtoList.isEmpty()) {
+                return ordersCompleteDtoList;
+            }
+        }
+        return new ArrayList<>();
+    }
+
+    private List<OrdersCompleteDto> convertOrdersDtoListToOrderCompleteDtoList(List<OrdersDto> ordersDtoList) {
+        List<OrdersCompleteDto> ordersCompleteDtoList = new ArrayList<>();
+        for (OrdersDto ordersDto : ordersDtoList) {
+            OrdersCompleteDto ordersCompleteDto = new OrdersCompleteDto();
+
+            UserAddressEntity userAddressEntity = userAddressRepository.findByAddressId(ordersDto.getAddressId());
+            ProductEntity productEntity = productRepository.findByProductId(ordersDto.getProductId());
+            ordersCompleteDto.setOrderId(ordersDto.getOrderId());
+            ordersCompleteDto.setUserId(ordersDto.getUserId());
+            if (ObjectUtils.isNotEmpty(userAddressEntity)) {
+                ordersCompleteDto.setUserAddressDto(userAddressEntity.toUserAddressDto());
+            }
+            if (ObjectUtils.isNotEmpty(productEntity)) {
+                ordersCompleteDto.setProductDto(productEntity.toProductDto());
+            }
+            ordersCompleteDto.setQuantity(ordersDto.getQuantity());
+            ordersCompleteDto.setOrderPlacedDate(ordersDto.getOrderPlacedDate());
+            ordersCompleteDto.setDeliveryDate(ordersDto.getDeliveryDate());
+            ordersCompleteDto.setOrderState(ordersDto.getOrderState());
+            if (ObjectUtils.isNotEmpty(ordersCompleteDto)) {
+                ordersCompleteDtoList.add(ordersCompleteDto);
+            }
+        }
+        return ordersCompleteDtoList;
+    }
+
 }

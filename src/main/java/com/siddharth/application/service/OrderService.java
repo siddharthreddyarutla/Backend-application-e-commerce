@@ -2,9 +2,8 @@ package com.siddharth.application.service;
 
 import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
 import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
+import com.siddharth.application.dto.orderDtos.OrdersCompleteDto;
 import com.siddharth.application.dto.orderDtos.OrdersDto;
-import com.siddharth.application.dto.orderDtos.OrderPlacedDetailsDto;
-import net.bytebuddy.asm.MemberSubstitution;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +16,11 @@ public interface OrderService {
 
     List<OrdersDto> editOrderStateInMyOrders(List<Long> orderIds, String orderState);
 
-    List<OrdersDto> getMyOrdersByUserId(Long userId);
+    List<OrdersCompleteDto> getMyOrdersByUserId(Long userId);
 
     List<OrderDetailsDto> getMyOrderDetailsByOrderId(Long orderId);
+
+    OrderDetailsCompleteDto getMyCompleteOrderDetailsByOrderId(Long userId, Long orderId);
+
+    List<OrdersCompleteDto> searchByProductTitleCategoryOrderIdAddressAndRecipientName(Long userId, String attribute);
 }
