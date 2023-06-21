@@ -77,4 +77,37 @@ public class OrderController {
         return new ResponseEntity<>(orderServiceImpl.searchByProductTitleCategoryOrderIdAddressAndRecipientName(userId,
                 attribute), HttpStatus.OK);
     }
+
+    // get order placed confirmation
+    @GetMapping(value = "/getOrderPlacedDetailsConfirmation")
+    private ResponseEntity<OrderPlacedDetailsDto> getOrderPlacedDetailsConfirmation(@RequestParam Long userId,
+                                                                                    @RequestParam List<Long> orderIds) {
+        return new ResponseEntity<>(orderServiceImpl.getOrderPlacedDetailsConfirmation(userId, orderIds), HttpStatus.OK);
+    }
+
+    // filter on order state
+    /**
+     * ORDERED
+     * DRAFT
+     * SHIPPED
+     * DELIVERED
+     * CANCELLED
+     */
+    @GetMapping(value = "/filterByOrderStateInMyOrders")
+    private ResponseEntity<List<OrdersCompleteDto>> getMyFilteredOrdersOnOrderState(@RequestParam String orderType) {
+        return new ResponseEntity<>(orderServiceImpl.getMyFilteredOrdersOnOrderState(orderType), HttpStatus.OK);
+    }
+
+    // filter on order placed date on
+    /**
+     * LAST MONTH
+     * LAST THREE MONTHS
+     * LAST SIX MONTHS
+     * ANY YEAR
+     */
+    @GetMapping(value = "/filterByOrderPlacedDateInMyOrders")
+    private ResponseEntity<List<OrdersCompleteDto>> getFilterByOrderPlacedDateInMyOrders(@RequestParam Long userId,
+                                                                                         @RequestParam String attribute) {
+        return new ResponseEntity<>(orderServiceImpl.getFilterByOrderPlacedDateInMyOrders(userId, attribute), HttpStatus.OK);
+    }
 }

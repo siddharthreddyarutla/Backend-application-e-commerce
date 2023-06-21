@@ -175,7 +175,7 @@ public class CartServiceImpl implements CartService {
         }
     }
 
-    private LocalDate findAverageOfDeliveryDates(List<LocalDate> deliveryDateList) {
+    public LocalDate findAverageOfDeliveryDates(List<LocalDate> deliveryDateList) {
         if (!deliveryDateList.isEmpty()) {
             deliveryDateList.sort(Comparator.naturalOrder());
             LocalDate firstDate = deliveryDateList.get(0);

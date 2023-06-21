@@ -1,9 +1,6 @@
 package com.siddharth.application.service;
 
-import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
-import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
-import com.siddharth.application.dto.orderDtos.OrdersCompleteDto;
-import com.siddharth.application.dto.orderDtos.OrdersDto;
+import com.siddharth.application.dto.orderDtos.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,4 +20,10 @@ public interface OrderService {
     OrderDetailsCompleteDto getMyCompleteOrderDetailsByOrderId(Long userId, Long orderId);
 
     List<OrdersCompleteDto> searchByProductTitleCategoryOrderIdAddressAndRecipientName(Long userId, String attribute);
+
+    OrderPlacedDetailsDto getOrderPlacedDetailsConfirmation(Long userId, List<Long> orderIds);
+
+    List<OrdersCompleteDto> getMyFilteredOrdersOnOrderState(String orderType);
+
+    List<OrdersCompleteDto> getFilterByOrderPlacedDateInMyOrders(Long userId, String attribute);
 }

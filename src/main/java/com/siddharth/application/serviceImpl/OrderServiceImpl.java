@@ -1,13 +1,11 @@
 package com.siddharth.application.serviceImpl;
 
-import com.siddharth.application.dto.orderDtos.OrderDetailsCompleteDto;
-import com.siddharth.application.dto.orderDtos.OrdersCompleteDto;
+import com.siddharth.application.dto.orderDtos.*;
 import com.siddharth.application.dto.productDtos.ProductDto;
 import com.siddharth.application.entity.userEntities.UserAddressEntity;
+import net.bytebuddy.asm.Advice;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import com.siddharth.application.dto.orderDtos.OrderDetailsDto;
-import com.siddharth.application.dto.orderDtos.OrdersDto;
 import com.siddharth.application.entity.orderEntities.OrderDetailsEntity;
 import com.siddharth.application.entity.orderEntities.OrdersEntity;
 import com.siddharth.application.entity.productEntities.ProductEntity;
@@ -26,9 +24,11 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PrimitiveIterator;
 
 import static com.siddharth.application.constants.Constants.DELIVERY_CHARGES;
 import static com.siddharth.application.constants.Constants.MINIMUM_DELIVERY_AMOUNT;
+import static com.siddharth.application.constants.DateConstants.*;
 import static com.siddharth.application.constants.OrderConstants.*;
 
 @Slf4j
@@ -50,6 +50,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     OrdersRepository ordersRepository;
 
+    @Autowired
+    CartServiceImpl cartServiceImpl;
 
     @Override
     public List<OrdersDto> orderProductItems(Long userId, List<Long> productIdList,List<Long> productQuantityList,
@@ -353,4 +355,119 @@ public class OrderServiceImpl implements OrderService {
         return ordersCompleteDtoList;
     }
 
+    @Override
+    public OrderPlacedDetailsDto getOrderPlacedDetailsConfirmation(Long userId, List<Long> orderIds) {
+        List<OrdersEntity> ordersEntityList = new ArrayList<>();
+        if (userId != null && !orderIds.isEmpty()) {
+            OrderPlacedDetailsDto orderPlacedDetailsDto = new OrderPlacedDetailsDto();
+            for (Long orderId : orderIds) {
+                OrdersEntity ordersEntity = ordersRepository.findByUserIdAndOrderId(userId, orderId);
+                if (ObjectUtils.isNotEmpty(ordersEntity)) {
+                    ordersEntityList.add(ordersEntity);
+                }
+            }
+            if (!ordersEntityList.isEmpty()) {
+                List<String> images = new ArrayList<>();
+                List<LocalDate> deliveryDatesList = new ArrayList<>();
+                Long addressId = 0L;
+
+                for (OrdersEntity ordersEntity : ordersEntityList) {
+                    addressId = ordersEntity.getAddressId();
+                    ProductEntity productEntity = productRepository.findByProductId(ordersEntity.getProductId());
+                    ProductInfoEntity productInfoEntity = productInfoRepository
+                            .findByProductId(ordersEntity.getProductId());
+                    if (ObjectUtils.isNotEmpty(productEntity) && ObjectUtils.isNotEmpty(productInfoEntity)) {
+                        images.add(productEntity.getImage());
+                        deliveryDatesList.add(productInfoEntity.getDeliveryDate());
+                    }
+                }
+                LocalDate deliveryDate = cartServiceImpl.findAverageOfDeliveryDates(deliveryDatesList);
+                UserAddressEntity userAddressEntity = userAddressRepository.findByAddressId(addressId);
+                StringBuilder addressBuilder = new StringBuilder();
+                addressBuilder.append(userAddressEntity.getHouseNo()).append(", ")
+                        .append(userAddressEntity.getVillageOrStreet()).append(", ")
+                        .append(userAddressEntity.getCityOrTown()).append(", ")
+                        .append(userAddressEntity.getState()).append(", ")
+                        .append(userAddressEntity.getPinCode()).append(", ")
+                        .append(userAddressEntity.getCountry()).append(".");
+
+                orderPlacedDetailsDto.setName(userAddressEntity.getFullName());
+                orderPlacedDetailsDto.setCompleteAddress(addressBuilder);
+                orderPlacedDetailsDto.setMobileNumber(userAddressEntity.getMobileNumber());
+                orderPlacedDetailsDto.setDeliveryDate(deliveryDate);
+                orderPlacedDetailsDto.setImages(images);
+            }
+            return orderPlacedDetailsDto;
+        }
+        return null;
+    }
+
+    @Override
+    public List<OrdersCompleteDto> getMyFilteredOrdersOnOrderState(String orderType) {
+        if (orderType != null) {
+            List<OrdersDto> ordersDtoList = new ArrayList<>();
+            List<OrdersCompleteDto> ordersCompleteDtoList = new ArrayList<>();
+            List<OrdersEntity> ordersEntityList = ordersRepository.findByOrderState(orderType);
+            if (!ordersEntityList.isEmpty()) {
+                for (OrdersEntity ordersEntity : ordersEntityList) {
+                    ordersDtoList.add(ordersEntity.toOrdersDto());
+                }
+                ordersCompleteDtoList = convertOrdersDtoListToOrderCompleteDtoList(ordersDtoList);
+            }
+            return ordersCompleteDtoList;
+        }
+        return null;
+    }
+
+    @Override
+    public List<OrdersCompleteDto> getFilterByOrderPlacedDateInMyOrders(Long userId, String attribute) {
+        LocalDate currentDate = LocalDate.now();
+        List<OrdersDto> ordersDtoList = new ArrayList<>();
+        List<OrdersCompleteDto> ordersCompleteDtoList = new ArrayList<>();
+
+        List<OrdersEntity> ordersEntityList = ordersRepository.findByUserId(userId);
+        if (!ordersEntityList.isEmpty()) {
+            for (OrdersEntity ordersEntity : ordersEntityList) {
+                LocalDate orderPlacedDate = ordersEntity.getOrderPlacedDate();
+                if (attribute.equals(LAST_MONTH)) {
+                    LocalDate lastMonthDate = currentDate.minusMonths(1);
+                    if (orderPlacedDate.isBefore(currentDate) && orderPlacedDate.isAfter(lastMonthDate)) {
+                        ordersDtoList.add(ordersEntity.toOrdersDto());
+                    }
+                }
+                if (attribute.equals(LAST_THREE_MONTHS)) {
+                    LocalDate lastThreeMonthsDate = currentDate.minusMonths(3);
+                    if (orderPlacedDate.isBefore(currentDate) && orderPlacedDate.isBefore(lastThreeMonthsDate)) {
+                        ordersDtoList.add(ordersEntity.toOrdersDto());
+                    }
+                }
+                if (attribute.equals(LAST_SIX_MONTHS)) {
+                    LocalDate lastSixMonthsDate = currentDate.minusMonths(6);
+                    if (orderPlacedDate.isBefore(currentDate) && orderPlacedDate.isAfter(lastSixMonthsDate)) {
+                        ordersDtoList.add(ordersEntity.toOrdersDto());
+                    }
+                }
+                if (attribute.equals(LAST_ONE_YEAR)) {
+                    LocalDate lastOneYearDate = currentDate.minusYears(1);
+                    if (orderPlacedDate.isBefore(currentDate) && orderPlacedDate.isAfter(lastOneYearDate)) {
+                        ordersDtoList.add(ordersEntity.toOrdersDto());
+                    }
+                } else {
+                    try {
+                        Long enteredYear = Long.valueOf(attribute);
+                        Long previousYear = enteredYear - 1L;
+                        int orderPlacedYear = orderPlacedDate.getYear();
+                        if (orderPlacedYear > previousYear && orderPlacedYear <= enteredYear) {
+                            ordersDtoList.add(ordersEntity.toOrdersDto());
+                        }
+                    } catch (NumberFormatException e) {
+                        log.info(e.toString());
+                    }
+                }
+            }
+            ordersCompleteDtoList = convertOrdersDtoListToOrderCompleteDtoList(ordersDtoList);
+            return ordersCompleteDtoList;
+        }
+        return null;
+    }
 }

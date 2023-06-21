@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Locale;
 
 @Data
@@ -18,6 +19,6 @@ public class OrderPlacedDetailsDto {
     private StringBuilder completeAddress;
     private String mobileNumber;
     private LocalDate deliveryDate;
-    private String images;
+    private List<String> images;
 }
 
