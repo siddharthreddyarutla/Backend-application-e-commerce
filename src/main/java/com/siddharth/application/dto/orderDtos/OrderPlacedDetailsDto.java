@@ -15,10 +15,10 @@ import java.util.Locale;
 @Builder
 public class OrderPlacedDetailsDto {
 
-    private String name;
-    private StringBuilder completeAddress;
-    private String mobileNumber;
-    private LocalDate deliveryDate;
-    private List<String> images;
+  private String name;
+  private StringBuilder completeAddress;
+  private String mobileNumber;
+  private LocalDate deliveryDate;
+  private List<String> images;
 }
 

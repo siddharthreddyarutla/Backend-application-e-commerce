@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CartDto {
-    private Long userId;
-    private Long productId;
-    private Long quantity;
-    private String cartState;
+  private Long userId;
+  private Long productId;
+  private Long quantity;
+  private String cartState;
 
-    public CartEntity toCartOrWishlistEntity() {
-        return CartEntity.builder().userId(userId).productId(productId).quantity(quantity)
-                .cartState(cartState).build();
-    }
+  public CartEntity toCartOrWishlistEntity() {
+    return CartEntity.builder().userId(userId).productId(productId).quantity(quantity)
+        .cartState(cartState).build();
+  }
 }

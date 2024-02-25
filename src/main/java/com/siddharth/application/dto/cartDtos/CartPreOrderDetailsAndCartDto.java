@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CartPreOrderDetailsAndCartDto {
 
-    CartCompleteDto cartCompleteDto;
-    PreOrderDetailsDto preOrderDetailsDto;
+  CartCompleteDto cartCompleteDto;
+  PreOrderDetailsDto preOrderDetailsDto;
 }

@@ -14,12 +14,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrdersCompleteDto {
-    private Long orderId;
-    private Long userId;
-    private UserAddressDto userAddressDto;
-    private ProductDto productDto;
-    private Long quantity;
-    private LocalDate orderPlacedDate;
-    private LocalDate deliveryDate;
-    private String orderState;
+  private Long orderId;
+  private Long userId;
+  private UserAddressDto userAddressDto;
+  private ProductDto productDto;
+  private Long quantity;
+  private LocalDate orderPlacedDate;
+  private LocalDate deliveryDate;
+  private String orderState;
 }

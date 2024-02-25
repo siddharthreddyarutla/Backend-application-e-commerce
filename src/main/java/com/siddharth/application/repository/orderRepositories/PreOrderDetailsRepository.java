@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PreOrderDetailsRepository extends JpaRepository<PreOrderDetailsEntity, Long> {
 
-    PreOrderDetailsEntity findByUserId(Long userId);
+  PreOrderDetailsEntity findByUserId(Long userId);
 }

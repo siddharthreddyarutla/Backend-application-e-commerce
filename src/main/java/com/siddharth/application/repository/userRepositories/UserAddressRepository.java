@@ -8,8 +8,11 @@ import java.util.List;
 
 @Repository
 public interface UserAddressRepository extends JpaRepository<UserAddressEntity, Long> {
-    List<UserAddressEntity> findByUserId(Long userId);
-    UserAddressEntity findByAddressId(Long addressId);
-    UserAddressEntity findByFullName(String name);
-    UserAddressEntity findByAddressIdAndFullName(Long addressId, String attribute);
+  List<UserAddressEntity> findByUserId(Long userId);
+
+  UserAddressEntity findByAddressId(Long addressId);
+
+  UserAddressEntity findByFullName(String name);
+
+  UserAddressEntity findByAddressIdAndFullName(Long addressId, String attribute);
 }

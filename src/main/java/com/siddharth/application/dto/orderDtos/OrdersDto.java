@@ -13,18 +13,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrdersDto {
-    private Long orderId;
-    private Long userId;
-    private Long addressId;
-    private Long productId;
-    private Long quantity;
-    private LocalDate orderPlacedDate;
-    private LocalDate deliveryDate;
-    private String orderState;
+  private Long orderId;
+  private Long userId;
+  private Long addressId;
+  private Long productId;
+  private Long quantity;
+  private LocalDate orderPlacedDate;
+  private LocalDate deliveryDate;
+  private String orderState;
 
-    public OrdersEntity toOrdersEntity() {
-        return OrdersEntity.builder().orderId(orderId).userId(userId).addressId(addressId).productId(productId)
-                .quantity(quantity).orderPlacedDate(orderPlacedDate).deliveryDate(deliveryDate)
-                .orderState(orderState).build();
-    }
+  public OrdersEntity toOrdersEntity() {
+    return OrdersEntity.builder().orderId(orderId).userId(userId).addressId(addressId)
+        .productId(productId).quantity(quantity).orderPlacedDate(orderPlacedDate)
+        .deliveryDate(deliveryDate).orderState(orderState).build();
+  }
 }

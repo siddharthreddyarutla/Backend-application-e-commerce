@@ -13,11 +13,12 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductInfoDto {
-    private Long productQuantity;
-    private String productState;
-    private LocalDate deliveryDate;
-    public ProductInfoEntity toProductInfoEntity() {
-        return ProductInfoEntity.builder().productQuantity(productQuantity)
-                .productState(productState).deliveryDate(deliveryDate).build();
-    }
+  private Long productQuantity;
+  private String productState;
+  private LocalDate deliveryDate;
+
+  public ProductInfoEntity toProductInfoEntity() {
+    return ProductInfoEntity.builder().productQuantity(productQuantity).productState(productState)
+        .deliveryDate(deliveryDate).build();
+  }
 }

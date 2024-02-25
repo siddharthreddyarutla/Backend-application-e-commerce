@@ -16,21 +16,21 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Table(name = "PRODUCT_INFO")
 public class ProductInfoEntity {
-    @Id
-    @Column(name = "PRODUCT_ID")
-    private Long productId;
+  @Id
+  @Column(name = "PRODUCT_ID")
+  private Long productId;
 
-    @Column(name = "AVAILABLE_QUANTITY")
-    private Long productQuantity;
+  @Column(name = "AVAILABLE_QUANTITY")
+  private Long productQuantity;
 
-    @Column(name = "STATE")
-    private String productState;
+  @Column(name = "STATE")
+  private String productState;
 
-    @Column(name = "DELIVERY_DATE")
-    private LocalDate deliveryDate;
+  @Column(name = "DELIVERY_DATE")
+  private LocalDate deliveryDate;
 
-    public ProductInfoDto toProductInfoDto() {
-        return ProductInfoDto.builder().productQuantity(productQuantity)
-                .productState(productState).deliveryDate(deliveryDate).build();
-    }
+  public ProductInfoDto toProductInfoDto() {
+    return ProductInfoDto.builder().productQuantity(productQuantity).productState(productState)
+        .deliveryDate(deliveryDate).build();
+  }
 }

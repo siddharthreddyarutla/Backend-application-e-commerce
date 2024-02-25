@@ -13,8 +13,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WishlistCompleteDto {
-    private String wishlistName;
-    private Long userId;
-    private ProductDto productDto;
-    private ProductInfoDto productInfoDto;
+  private String wishlistName;
+  private Long userId;
+  private ProductDto productDto;
+  private ProductInfoDto productInfoDto;
 }

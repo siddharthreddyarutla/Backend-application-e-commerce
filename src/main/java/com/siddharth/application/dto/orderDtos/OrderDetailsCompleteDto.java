@@ -16,16 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 public class OrderDetailsCompleteDto {
 
-    private Long userId;
-    private List<ProductDto> productDtoList;
-    private UserAddressDto shippingAddressDto;
-    private UserAddressDto billingAddressDto;
-    private Long quantity;
-    private String paymentMethod;
-    private LocalDate deliveryDate;
-    private Long totalItems;
-    private Double totalAmount;
-    private Long deliveryCharges;
-    private Long taxCharges;
-    private Double orderAmount;
+  private Long userId;
+  private List<ProductDto> productDtoList;
+  private UserAddressDto shippingAddressDto;
+  private UserAddressDto billingAddressDto;
+  private Long quantity;
+  private String paymentMethod;
+  private LocalDate deliveryDate;
+  private Long totalItems;
+  private Double totalAmount;
+  private Long deliveryCharges;
+  private Long taxCharges;
+  private Double orderAmount;
 }

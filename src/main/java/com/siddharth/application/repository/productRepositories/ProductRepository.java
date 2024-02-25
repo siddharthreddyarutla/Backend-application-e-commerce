@@ -9,16 +9,27 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 
-    List<ProductEntity> findAll();
-    ProductEntity findByProductId(Long productId);
-    List<ProductEntity> findByCategory(String category);
-    List<ProductEntity> findByTitle(String title);
-    List<ProductEntity> findByBrand(String brand);
-    List<ProductEntity> findByPriceLessThanEqual(Long price);
-    List<ProductEntity> findByPriceGreaterThanEqual(Long price);
-    List<ProductEntity> findByPriceBetween(Long leastPrice, Long highestPrice);
-    List<ProductEntity> findAllByOrderByRatingAsc();
-    List<ProductEntity> findAllByOrderByRatingDesc();
-    ProductEntity findByProductIdAndTitle(Long productId, String attribute);
-    ProductEntity findByProductIdAndCategory(Long productId, String attribute);
+  List<ProductEntity> findAll();
+
+  ProductEntity findByProductId(Long productId);
+
+  List<ProductEntity> findByCategory(String category);
+
+  List<ProductEntity> findByTitle(String title);
+
+  List<ProductEntity> findByBrand(String brand);
+
+  List<ProductEntity> findByPriceLessThanEqual(Long price);
+
+  List<ProductEntity> findByPriceGreaterThanEqual(Long price);
+
+  List<ProductEntity> findByPriceBetween(Long leastPrice, Long highestPrice);
+
+  List<ProductEntity> findAllByOrderByRatingAsc();
+
+  List<ProductEntity> findAllByOrderByRatingDesc();
+
+  ProductEntity findByProductIdAndTitle(Long productId, String attribute);
+
+  ProductEntity findByProductIdAndCategory(Long productId, String attribute);
 }

@@ -13,15 +13,15 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PreOrderDetailsDto {
-    private Long userId;
-    private LocalDate expectedDeliveryDate;
-    private String eligibleForFreeDelivery;
-    private Long totalItemsInCart;
-    private Double totalAmount;
+  private Long userId;
+  private LocalDate expectedDeliveryDate;
+  private String eligibleForFreeDelivery;
+  private Long totalItemsInCart;
+  private Double totalAmount;
 
-    public PreOrderDetailsEntity toPreOrderDetailsEntity() {
-        return PreOrderDetailsEntity.builder().userId(userId).expectedDeliveryDate(expectedDeliveryDate)
-                .eligibleForFreeDelivery(eligibleForFreeDelivery).totalItemsInCart(totalItemsInCart)
-                .totalAmount(totalAmount).build();
-    }
+  public PreOrderDetailsEntity toPreOrderDetailsEntity() {
+    return PreOrderDetailsEntity.builder().userId(userId).expectedDeliveryDate(expectedDeliveryDate)
+        .eligibleForFreeDelivery(eligibleForFreeDelivery).totalItemsInCart(totalItemsInCart)
+        .totalAmount(totalAmount).build();
+  }
 }

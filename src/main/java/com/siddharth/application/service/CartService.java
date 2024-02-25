@@ -9,23 +9,23 @@ import com.siddharth.application.dto.productDtos.ProductDto;
 import java.util.List;
 
 public interface CartService {
-    CartDto addToCart(CartDto cartDto);
+  CartDto addToCart(CartDto cartDto);
 
-    List<ProductDto> getAllProductsFromCart(Long userId);
+  List<ProductDto> getAllProductsFromCart(Long userId);
 
-    List<CartCompleteDto> getAllCompleteProductDetailsAddedToCart(Long userId);
+  List<CartCompleteDto> getAllCompleteProductDetailsAddedToCart(Long userId);
 
-    PreOrderDetailsDto getPreOrderDetailsOfCartByUserId(Long userId);
+  PreOrderDetailsDto getPreOrderDetailsOfCartByUserId(Long userId);
 
-    CartPreOrderDetailsAndCartDto deleteProductFromCart(Long userId, Long productId);
+  CartPreOrderDetailsAndCartDto deleteProductFromCart(Long userId, Long productId);
 
-    String updateOrderState(Long orderId, String orderState);
+  String updateOrderState(Long orderId, String orderState);
 
-    String deleteCart(Long userId);
+  String deleteCart(Long userId);
 
-    PreOrderDetailsDto editProductQuantityInCart(Long userId, Long productId, Long quantity);
+  PreOrderDetailsDto editProductQuantityInCart(Long userId, Long productId, Long quantity);
 
-    List<CartCompleteDto> getAllCompleteProductDetailsAddedToSaveForLater(Long userId);
+  List<CartCompleteDto> getAllCompleteProductDetailsAddedToSaveForLater(Long userId);
 
-    String deleteProductFromSaveForLater(Long userId, Long productId);
+  String deleteProductFromSaveForLater(Long userId, Long productId);
 }

@@ -8,9 +8,9 @@ import java.util.List;
 
 @Repository
 public interface WishlistRepository extends JpaRepository<WishListEntity, Long> {
-    WishListEntity findByProductId(Long productId);
+  WishListEntity findByProductId(Long productId);
 
-    List<WishListEntity> findByUserId(Long userId);
+  List<WishListEntity> findByUserId(Long userId);
 
-    List<WishListEntity> findByUserIdAndWishlistName(Long userId, String wishlistName);
+  List<WishListEntity> findByUserIdAndWishlistName(Long userId, String wishlistName);
 }

@@ -7,23 +7,23 @@ import com.siddharth.application.dto.userDtos.UserLoginDto;
 import java.util.List;
 
 public interface UserService {
-    UserDto createUser(UserDto userDto);
+  UserDto createUser(UserDto userDto);
 
-    UserLoginDto userLogin(UserLoginDto userLoginDto);
+  UserLoginDto userLogin(UserLoginDto userLoginDto);
 
-    UserDto getUser(String name);
+  UserDto getUser(String name);
 
-    UserDto getUserById(Long userId);
+  UserDto getUserById(Long userId);
 
-    String deleteUserById(Long userId);
+  String deleteUserById(Long userId);
 
-    UserDto editUserById(Long userId, UserDto userDto);
+  UserDto editUserById(Long userId, UserDto userDto);
 
-    UserAddressDto createAddressForUser(Long userId, UserAddressDto userAddressDto);
+  UserAddressDto createAddressForUser(Long userId, UserAddressDto userAddressDto);
 
-    List<UserAddressDto> getAllUserAddressesByUserId(Long userId);
+  List<UserAddressDto> getAllUserAddressesByUserId(Long userId);
 
-    String deleteAddressById(Long addressId);
+  String deleteAddressById(Long addressId);
 
-    UserAddressDto editAddressById(Long addressId, UserAddressDto userAddressDto);
+  UserAddressDto editAddressById(Long addressId, UserAddressDto userAddressDto);
 }

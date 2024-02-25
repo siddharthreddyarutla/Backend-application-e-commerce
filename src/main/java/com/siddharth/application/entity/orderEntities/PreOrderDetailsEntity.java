@@ -17,25 +17,25 @@ import java.time.LocalDate;
 @Table(name = "PRE_ORDER_DETAILS")
 public class PreOrderDetailsEntity {
 
-    @Id
-    @Column(name = "USER_ID")
-    private Long userId;
+  @Id
+  @Column(name = "USER_ID")
+  private Long userId;
 
-    @Column(name = "EXPECTED_DELIVERY_DATE")
-    private LocalDate expectedDeliveryDate;
+  @Column(name = "EXPECTED_DELIVERY_DATE")
+  private LocalDate expectedDeliveryDate;
 
-    @Column(name = "ORDER_ELIGIBILITY")
-    private String eligibleForFreeDelivery;
+  @Column(name = "ORDER_ELIGIBILITY")
+  private String eligibleForFreeDelivery;
 
-    @Column(name = "TOTAL_ITEMS")
-    private Long totalItemsInCart;
+  @Column(name = "TOTAL_ITEMS")
+  private Long totalItemsInCart;
 
-    @Column(name = "TOTAL_AMOUNT")
-    private Double totalAmount;
+  @Column(name = "TOTAL_AMOUNT")
+  private Double totalAmount;
 
-    public PreOrderDetailsDto toPreOrderDetailsDto() {
-        return PreOrderDetailsDto.builder().eligibleForFreeDelivery(eligibleForFreeDelivery)
-                .expectedDeliveryDate(expectedDeliveryDate).totalItemsInCart(totalItemsInCart)
-                .totalAmount(totalAmount).build();
-    }
+  public PreOrderDetailsDto toPreOrderDetailsDto() {
+    return PreOrderDetailsDto.builder().eligibleForFreeDelivery(eligibleForFreeDelivery)
+        .expectedDeliveryDate(expectedDeliveryDate).totalItemsInCart(totalItemsInCart)
+        .totalAmount(totalAmount).build();
+  }
 }

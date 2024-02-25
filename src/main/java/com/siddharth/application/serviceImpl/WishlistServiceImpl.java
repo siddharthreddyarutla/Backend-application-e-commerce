@@ -21,96 +21,99 @@ import java.util.List;
 @Service
 public class WishlistServiceImpl implements WishlistService {
 
-    @Autowired
-    WishlistRepository wishlistRepository;
+  @Autowired
+  WishlistRepository wishlistRepository;
 
-    @Autowired
-    ProductRepository productRepository;
+  @Autowired
+  ProductRepository productRepository;
 
-    @Autowired
-    ProductInfoRepository productInfoRepository;
+  @Autowired
+  ProductInfoRepository productInfoRepository;
 
-    @Override
-    public Long addProductToWishlist(WishlistDto wishlistDto) {
-        if (ObjectUtils.isNotEmpty(wishlistDto)) {
-            WishListEntity wishListEntity = wishlistRepository.findByProductId(wishlistDto.getProductId());
-            if (ObjectUtils.isEmpty(wishListEntity)) {
-                WishListEntity wishListEntity1 = wishlistDto.toWishlistEntity();
-                wishlistRepository.save(wishListEntity1);
-                return 1L;
-            }
-        }
-        return 0L;
+  @Override
+  public Long addProductToWishlist(WishlistDto wishlistDto) {
+    if (ObjectUtils.isNotEmpty(wishlistDto)) {
+      WishListEntity wishListEntity =
+          wishlistRepository.findByProductId(wishlistDto.getProductId());
+      if (ObjectUtils.isEmpty(wishListEntity)) {
+        WishListEntity wishListEntity1 = wishlistDto.toWishlistEntity();
+        wishlistRepository.save(wishListEntity1);
+        return 1L;
+      }
     }
+    return 0L;
+  }
 
-    @Override
-    public List<String> getMyWishlists(Long userId) {
-        if (userId != null) {
-            List<WishListEntity> wishListEntityList = wishlistRepository.findByUserId(userId);
-            List<String> wishlistNameList = new ArrayList<>();
-            if (!wishListEntityList.isEmpty()) {
-                for (WishListEntity wishListEntity : wishListEntityList) {
-                    if (!wishlistNameList.contains(wishListEntity.getWishlistName())) {
-                        wishlistNameList.add(wishListEntity.getWishlistName());
-                    }
-                }
-                return wishlistNameList;
-            }
+  @Override
+  public List<String> getMyWishlists(Long userId) {
+    if (userId != null) {
+      List<WishListEntity> wishListEntityList = wishlistRepository.findByUserId(userId);
+      List<String> wishlistNameList = new ArrayList<>();
+      if (!wishListEntityList.isEmpty()) {
+        for (WishListEntity wishListEntity : wishListEntityList) {
+          if (!wishlistNameList.contains(wishListEntity.getWishlistName())) {
+            wishlistNameList.add(wishListEntity.getWishlistName());
+          }
         }
-        return new ArrayList<>();
+        return wishlistNameList;
+      }
     }
+    return new ArrayList<>();
+  }
 
-    @Override
-    public List<WishlistCompleteDto> getMyCompleteWishlistDetails(Long userId) {
-        List<WishListEntity> wishListEntityList = wishlistRepository.findByUserId(userId);
-        List<WishlistCompleteDto> wishlistCompleteDtoList = new ArrayList<>();
+  @Override
+  public List<WishlistCompleteDto> getMyCompleteWishlistDetails(Long userId) {
+    List<WishListEntity> wishListEntityList = wishlistRepository.findByUserId(userId);
+    List<WishlistCompleteDto> wishlistCompleteDtoList = new ArrayList<>();
 
-        if (!wishListEntityList.isEmpty()) {
-            for (WishListEntity wishListEntity : wishListEntityList) {
-                WishlistCompleteDto wishlistCompleteDto = new WishlistCompleteDto();
-                ProductEntity productEntity = productRepository.findByProductId(wishListEntity.getProductId());
-                ProductInfoEntity productInfoEntity = productInfoRepository
-                        .findByProductId(wishListEntity.getProductId());
-                wishlistCompleteDto.setWishlistName(wishListEntity.getWishlistName());
-                wishlistCompleteDto.setUserId(wishListEntity.getUserId());
-                wishlistCompleteDto.setProductDto(productEntity.toProductDto());
-                wishlistCompleteDto.setProductInfoDto(productInfoEntity.toProductInfoDto());
-                if (ObjectUtils.isNotEmpty(wishlistCompleteDto)) {
-                    wishlistCompleteDtoList.add(wishlistCompleteDto);
-                }
-            }
-            return wishlistCompleteDtoList;
+    if (!wishListEntityList.isEmpty()) {
+      for (WishListEntity wishListEntity : wishListEntityList) {
+        WishlistCompleteDto wishlistCompleteDto = new WishlistCompleteDto();
+        ProductEntity productEntity =
+            productRepository.findByProductId(wishListEntity.getProductId());
+        ProductInfoEntity productInfoEntity =
+            productInfoRepository.findByProductId(wishListEntity.getProductId());
+        wishlistCompleteDto.setWishlistName(wishListEntity.getWishlistName());
+        wishlistCompleteDto.setUserId(wishListEntity.getUserId());
+        wishlistCompleteDto.setProductDto(productEntity.toProductDto());
+        wishlistCompleteDto.setProductInfoDto(productInfoEntity.toProductInfoDto());
+        if (ObjectUtils.isNotEmpty(wishlistCompleteDto)) {
+          wishlistCompleteDtoList.add(wishlistCompleteDto);
         }
-        return new ArrayList<>();
+      }
+      return wishlistCompleteDtoList;
     }
+    return new ArrayList<>();
+  }
 
-    @Override
-    public Long deleteMyWishlist(Long userId, String wishlistName) {
-        List<WishListEntity> wishListEntityList = wishlistRepository
-                .findByUserIdAndWishlistName(userId, wishlistName);
-        if (!wishListEntityList.isEmpty()) {
-            for (WishListEntity wishListEntity : wishListEntityList) {
-                wishlistRepository.delete(wishListEntity);
-            }
-            return 1L;
-        }
-        return 0L;
+  @Override
+  public Long deleteMyWishlist(Long userId, String wishlistName) {
+    List<WishListEntity> wishListEntityList =
+        wishlistRepository.findByUserIdAndWishlistName(userId, wishlistName);
+    if (!wishListEntityList.isEmpty()) {
+      for (WishListEntity wishListEntity : wishListEntityList) {
+        wishlistRepository.delete(wishListEntity);
+      }
+      return 1L;
     }
+    return 0L;
+  }
 
-    @Override
-    public List<String> editMyWishlistByWishlistName(Long userId, String oldWishlistName, String newWishlistName) {
-        List<WishListEntity> wishListEntityList = wishlistRepository
-                .findByUserIdAndWishlistName(userId, oldWishlistName);
-        List<String> wishlistNameList = new ArrayList<>();
+  @Override
+  public List<String> editMyWishlistByWishlistName(Long userId, String oldWishlistName,
+      String newWishlistName) {
+    List<WishListEntity> wishListEntityList =
+        wishlistRepository.findByUserIdAndWishlistName(userId, oldWishlistName);
+    List<String> wishlistNameList = new ArrayList<>();
 
-        if (!wishListEntityList.isEmpty()) {
-            for (WishListEntity wishListEntity : wishListEntityList) {
-                wishListEntity.setWishlistName(newWishlistName);
-                wishlistRepository.save(wishListEntity);
-                wishlistNameList = getMyWishlists(userId);
-            }
-            return wishlistNameList;
-        }
-        return new ArrayList<>();
+    if (!wishListEntityList.isEmpty()) {
+      for (WishListEntity wishListEntity : wishListEntityList) {
+        wishListEntity.setWishlistName(newWishlistName);
+        wishlistRepository.save(wishListEntity);
+        wishlistNameList = getMyWishlists(userId);
+      }
+      return wishlistNameList;
     }
+    return new ArrayList<>();
+  }
 }

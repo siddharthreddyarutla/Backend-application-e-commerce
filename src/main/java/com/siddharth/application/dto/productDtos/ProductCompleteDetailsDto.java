@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductCompleteDetailsDto {
-    ProductDto productDto;
-    ProductInfoDto productInfoDto;
+  ProductDto productDto;
+  ProductInfoDto productInfoDto;
 }

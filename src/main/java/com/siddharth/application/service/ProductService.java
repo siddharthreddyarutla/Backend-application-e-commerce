@@ -8,50 +8,52 @@ import com.siddharth.application.dto.productDtos.ProductPrimaryDto;
 import java.util.List;
 
 public interface ProductService {
-    ProductDto addProduct(ProductDto productDto);
+  ProductDto addProduct(ProductDto productDto);
 
-    List<ProductDto> getDetails();
+  List<ProductDto> getDetails();
 
-    ProductDto getDetailsById(Long productId);
+  ProductDto getDetailsById(Long productId);
 
-    String deleteDetailsById(Long productId);
+  String deleteDetailsById(Long productId);
 
-    ProductDto editDetailsById(Long productId, ProductDto productDto);
+  ProductDto editDetailsById(Long productId, ProductDto productDto);
 
-    List<ProductDto> searchProductByCategory(String category);
+  List<ProductDto> searchProductByCategory(String category);
 
-    List<ProductDto> searchProductByTitle(String title);
+  List<ProductDto> searchProductByTitle(String title);
 
-    List<ProductDto> searchProductByBrand(String brand);
+  List<ProductDto> searchProductByBrand(String brand);
 
 
-    List<ProductDto> searchByHighestPrice(Long highestPrice);
+  List<ProductDto> searchByHighestPrice(Long highestPrice);
 
-    List<ProductDto> searchByLeastPriceAndHighestPrice(Long leastPrice, Long highestPrice);
+  List<ProductDto> searchByLeastPriceAndHighestPrice(Long leastPrice, Long highestPrice);
 
-    List<ProductDto> searchByLeastPrice(Long leastPrice);
+  List<ProductDto> searchByLeastPrice(Long leastPrice);
 
-    List<ProductDto> sortByRatingAsc();
+  List<ProductDto> sortByRatingAsc();
 
-    List<ProductDto> sortByRatingDesc();
+  List<ProductDto> sortByRatingDesc();
 
-    List<ProductDto> sortByDiscountAsc();
+  List<ProductDto> sortByDiscountAsc();
 
-    List<ProductDto> sortByDiscountDesc();
+  List<ProductDto> sortByDiscountDesc();
 
-    ProductCompleteDetailsDto postCompleteDetailsOfProduct(ProductCompleteDetailsDto productCompleteDetails);
+  ProductCompleteDetailsDto postCompleteDetailsOfProduct(
+      ProductCompleteDetailsDto productCompleteDetails);
 
-    List<ProductCompleteDetailsDto> getAllCompleteProductDetails();
+  List<ProductCompleteDetailsDto> getAllCompleteProductDetails();
 
-    ProductCompleteDetailsDto getCompleteProductDetailsByProductId(Long productId);
+  ProductCompleteDetailsDto getCompleteProductDetailsByProductId(Long productId);
 
-    ProductCompleteDetailsDto putCompleteProductDetailsByProductId(Long productId,
-                                                                   ProductCompleteDetailsDto productCompleteDetailsDto);
+  ProductCompleteDetailsDto putCompleteProductDetailsByProductId(Long productId,
+      ProductCompleteDetailsDto productCompleteDetailsDto);
 
-    ProductInfoDto setStateOfProduct(Long productId, String productState);
+  ProductInfoDto setStateOfProduct(Long productId, String productState);
 
-    ProductInfoDto putProductQuantityByProductId(Long productId, Long productQuantity);
-    String deleteCompleteProductDetailsByProductId(Long productId);
+  ProductInfoDto putProductQuantityByProductId(Long productId, Long productQuantity);
 
-    List<ProductPrimaryDto> getAllPrimaryProductDetails();
+  String deleteCompleteProductDetailsByProductId(Long productId);
+
+  List<ProductPrimaryDto> getAllPrimaryProductDetails();
 }

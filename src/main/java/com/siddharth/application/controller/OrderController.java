@@ -22,10 +22,12 @@ public class OrderController {
      * here everything will be in draft state until finally the is order placed
      */
     @PostMapping(value = "/orderProductItems")
-    private ResponseEntity<List<OrdersDto>> orderProducts(@RequestParam Long userId, @RequestParam List<Long> productIdList,
-                                                          @RequestParam List<Long> productQuantityList, @RequestParam Long shippingAddressId, @RequestParam Long
-                                                          billingAddressId, @RequestParam String paymentMode) {
-        return new ResponseEntity<>(orderServiceImpl.orderProductItems(userId, productIdList, productQuantityList,
+    private ResponseEntity<List<OrdersDto>> orderProducts(@RequestParam Long userId,
+        @RequestParam List<Long> productIdList, @RequestParam List<Long> productQuantityList,
+        @RequestParam Long shippingAddressId, @RequestParam Long billingAddressId,
+        @RequestParam String paymentMode) {
+        return new ResponseEntity<>(
+            orderServiceImpl.orderProductItems(userId, productIdList, productQuantityList,
                 shippingAddressId, billingAddressId, paymentMode), HttpStatus.OK);
     }
 

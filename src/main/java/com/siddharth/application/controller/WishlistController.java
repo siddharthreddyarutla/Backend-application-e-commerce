@@ -15,39 +15,45 @@ import java.util.List;
 @RequestMapping(value = "/wishlist")
 public class WishlistController {
 
-    @Autowired
-    WishlistServiceImpl wishlistServiceImpl;
+  @Autowired
+  WishlistServiceImpl wishlistServiceImpl;
 
-    // add product to wishlist
-    @PostMapping(value = "/addToWishlist")
-    private ResponseEntity<Long> addProductToWishlist(@RequestBody WishlistDto wishlistDto) {
-        return new ResponseEntity<>(wishlistServiceImpl.addProductToWishlist(wishlistDto), HttpStatus.OK);
-    }
+  // add product to wishlist
+  @PostMapping(value = "/addToWishlist")
+  private ResponseEntity<Long> addProductToWishlist(@RequestBody WishlistDto wishlistDto) {
+    return new ResponseEntity<>(wishlistServiceImpl.addProductToWishlist(wishlistDto),
+        HttpStatus.OK);
+  }
 
-    // get the list of wishlists
-    @GetMapping(value = "/getMyWishlists")
-    private ResponseEntity<List<String>>  getMyWishlists(@RequestParam Long userId) {
-        return new ResponseEntity<List<String>>(wishlistServiceImpl.getMyWishlists(userId), HttpStatus.OK);
-    }
+  // get the list of wishlists
+  @GetMapping(value = "/getMyWishlists")
+  private ResponseEntity<List<String>> getMyWishlists(@RequestParam Long userId) {
+    return new ResponseEntity<List<String>>(wishlistServiceImpl.getMyWishlists(userId),
+        HttpStatus.OK);
+  }
 
-    // get my wishlist complete details
-    @GetMapping(value = "/getMyCompleteWishlistDetails")
-    private ResponseEntity<List<WishlistCompleteDto>> getMyCompleteWishlistDetails(@RequestParam Long userId) {
-        return new ResponseEntity<>(wishlistServiceImpl.getMyCompleteWishlistDetails(userId), HttpStatus.OK);
-    }
+  // get my wishlist complete details
+  @GetMapping(value = "/getMyCompleteWishlistDetails")
+  private ResponseEntity<List<WishlistCompleteDto>> getMyCompleteWishlistDetails(
+      @RequestParam Long userId) {
+    return new ResponseEntity<>(wishlistServiceImpl.getMyCompleteWishlistDetails(userId),
+        HttpStatus.OK);
+  }
 
-    // delete wishlist by wishlist name
-    @DeleteMapping(value = "/deleteMyWishlist")
-    private ResponseEntity<Long> deleteMyWishlist(@RequestParam Long userId, @RequestParam String wishlistName) {
-        return new ResponseEntity<>(wishlistServiceImpl.deleteMyWishlist(userId, wishlistName), HttpStatus.OK);
-    }
+  // delete wishlist by wishlist name
+  @DeleteMapping(value = "/deleteMyWishlist")
+  private ResponseEntity<Long> deleteMyWishlist(@RequestParam Long userId,
+      @RequestParam String wishlistName) {
+    return new ResponseEntity<>(wishlistServiceImpl.deleteMyWishlist(userId, wishlistName),
+        HttpStatus.OK);
+  }
 
-    // edit wishlist name
-    @PutMapping(value = "/editMyWishlistByWishlistName")
-    private ResponseEntity<List<String>> editMyWishlistByWishlistName(@RequestParam Long userId, @RequestParam
-                                                                      String oldWishlistName, @RequestParam String
-                                                                      newWishlistName) {
-        return new ResponseEntity<>(wishlistServiceImpl.editMyWishlistByWishlistName(userId, oldWishlistName,
-                newWishlistName), HttpStatus.OK);
-    }
+  // edit wishlist name
+  @PutMapping(value = "/editMyWishlistByWishlistName")
+  private ResponseEntity<List<String>> editMyWishlistByWishlistName(@RequestParam Long userId,
+      @RequestParam String oldWishlistName, @RequestParam String newWishlistName) {
+    return new ResponseEntity<>(
+        wishlistServiceImpl.editMyWishlistByWishlistName(userId, oldWishlistName, newWishlistName),
+        HttpStatus.OK);
+  }
 }

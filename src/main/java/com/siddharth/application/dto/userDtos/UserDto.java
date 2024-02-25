@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDto {
-    private String name;
-    private String mobileNo;
-    private String location;
-    private String email;
-    private String password;
-    private String role;
+  private String name;
+  private String mobileNo;
+  private String location;
+  private String email;
+  private String password;
+  private String role;
 
-    public UserEntity toUserEntity() {
-        return  UserEntity.builder().name(name).mobileNo(mobileNo).location(location).email(email)
-                .password(password).role(role).build();
-    }
+  public UserEntity toUserEntity() {
+    return UserEntity.builder().name(name).mobileNo(mobileNo).location(location).email(email)
+        .password(password).role(role).build();
+  }
 }
